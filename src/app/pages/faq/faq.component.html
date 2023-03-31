@@ -1,0 +1,279 @@
+<div class="col text-right mb-4">
+
+  <h4 class="my-4 d-flex align-items-center">
+    <div class="ion ion-md-help-circle-outline text-large m-1"></div>
+    <div class="m-1">
+      {{"Footer.faqs" | translate}}
+    </div>
+  </h4>
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[0] = !accordionStates[0]" [attr.aria-expanded]="!accordionStates[0]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      ماهو بومب تيكت؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[0]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            بومب تيكت منصة معتمده بسجل تجاري وموثقه في (معروف)تسمح للمستخدمين بشراء أو بيع تذاكر الفعاليات الترفيهية
+            والرياضية والحفلات الغنائية.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[1] = !accordionStates[1]" [attr.aria-expanded]="!accordionStates[1]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      لماذا نستخدم منصة بومب تيكت؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[1]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            في حال قمت بشراء تذكرة وتعذّر عليك الحضور بدلاً من ترك المقاعد فارغة أو خسارة قيمة التذكرة المالية بإمكانك
+            عرضها حيث يتم شراؤها من شخص آخر يرغب بالحضور في حال رغبت بحضور فعالية نفدت تذاكرها بالكامل فإنه من المخاطرة
+            أن يتم دفع الأموال لشخص مجهول ليتم اكتشاف ان التذكرة بعد ذلك لا تعمل , بومب تيكت يقوم بعملية تحقق من التذاكر
+            وعلى الرغم من ذلك يقوم بحجز مبلغ التذاكر حتى التأكد أن المشتري قام بحضور الفعالية فعلاً لتقوم بعدها بتحويل
+            المبلغ للبائع.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[3] = !accordionStates[3]" [attr.aria-expanded]="!accordionStates[3]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      كيف أقوم بشراء تذكرة؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[3]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            الدخول للمنصة ثم تسجيل حساب خاص فيك ومن ثم الذهاب للصفحة الرئيسية والدخول للفعاليه المراد شراء تذاكرها وفي
+            حال لم تظهر الفعالية بالصفحة الرئيسية أكتب اسم الفعاليه في خانة البحث ثم الدخول عليها ثم سيظهر لك عدة تذاكر
+            أختر التذكرة المناسبة لك بضغط زر شراء وأكمل عمليات الدفع ثم ستصلك تذكرتك مباشرة.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[4] = !accordionStates[4]" [attr.aria-expanded]="!accordionStates[4]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      ماهي مزايا بومب تيكت؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[4]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            سرعة العمل وتوفير الأمان العالي لجميع المستفيدين لاننا منصة معتمدة تابعة لمؤسسة ريادة الآفاق للتسويق
+            الإلكتروني.
+          </li>
+          <li>
+            سرعه في تسليم التذاكر للمستفيدين والرد على طلباتهم واستفساراتهم
+          </li>
+          <li>
+            يتم تحويل مبالغ بائعي التذاكر بعد الفعاليه خلال48-72 ساعة
+          </li>
+          <li>
+            من مزايانا في بومب تيكت نتيح للجميع فرصة العمل معنا من منزلك عن طريق التسويق بالعمولة للانضمام لفريق
+            المسوقين فقط تواصل معنا على إحدى وسائل التواصل الاجتماعي
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[5] = !accordionStates[5]" [attr.aria-expanded]="!accordionStates[5]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      أشتريت تذكرة من بومب تيكت ولم أتمكن من الحضور ، هل أستطيع إستعادة أموالي؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[5]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            بإمكانك عرض تذكرتك للبيع مرة أخرى من قائمة "بيع تذكرتك" في بومب تيكت
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[6] = !accordionStates[6]" [attr.aria-expanded]="!accordionStates[6]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      ماذا لو أشتريت تذكرة ولم تعمل؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[6]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            على الرغم من اننا نقوم بعملية تحقق دقيقة لجميع التذاكر المعروضة الا انه في حالات معدودة قد تواجه مشكلة في
+            استخدام التذكرة للدخول , نوصي العملاء بالتواصل مباشرة مع فريق بومب تيكت على وسائل التواصل الاجتماعي في وقت
+            الفعالية لايجاد الحلول لهم وفي حال التأكد من فريقنا أن التذكرة لاتعمل سيتم إرجاع كامل المبلغ المدفوع في
+            المحفظة الإلكترونية والاستفادة من المبلغ في شراء أي فعالية قادمة أخرى في أي وقت .
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[7] = !accordionStates[7]" [attr.aria-expanded]="!accordionStates[7]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      كيف أنضم لفريق التسويق بالعمولة لدى بومب تيكت وكم العمولة ؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[7]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            كل ماعليك هو التواصل معنا على إحدى وسائل التواصل الاجتماعي وطلب الانضمام لفريق التسويق بالعمولة وسيتم تسجيلك
+            مباشرة وإنشاء كوبون خاص فيك وكل مشتري يستخدم ذلك الكوبون في شراء تذكرة , يتم تحويل 5% من مبلغ التذكرة التي
+            تم بيعها للمسوق خلال 2-7 أيام من بعد نهاية الفعالية .
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[8] = !accordionStates[8]" [attr.aria-expanded]="!accordionStates[8]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      قمت بعرض تذكرة للبيع ، وقررت التراجع عن بيعها ماذا أفعل؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[8]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            تواصل بشكل عاجل مع فريق بومب تيكت على إحدى وسائل التواصل الاجتماعي وفريقنا سيحذف التذكرة من الموقع بشكل
+            مباشر.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[9] = !accordionStates[9]" [attr.aria-expanded]="!accordionStates[9]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      قمت برفع طلب لبيع تذكرة وكانت الحاله مرفوضة لماذا؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[9]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            يتم قبول فقط نسخ الـ PDF الأصلية عند بيع التذاكر ولا يتم قبول الصور أو حتى الصور التي يتم تحويلها لـ PDF ,
+            وفي حال كانت التذاكر متجاورة بإمكانك رفعها بطلب واحد أما لو كانت لديك تذاكر في مقاعد متفرقة فيتوجب عليك رفع
+            التذاكر بطلبات متفرقة.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[10] = !accordionStates[10]" [attr.aria-expanded]="!accordionStates[10]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      عند طرح التذكرة في بومب تيكت هل سيصلني عرض للشراء أستطيع قبوله أو رفضه؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[10]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            عند إضافة تذكرة للبيع في الموقع وتحديد السعر فإنه بمجرد دفع قيمة التذكرة من قِبل المشتري سيتم حجز المبلغ لدى
+            الموقع وإرسال التذكرة , لا يتطلب موافقة من البائع لإرسال التذكرة ولا يمكن رفض عملية الشراء بعد دفع المبلغ من
+            المشتري.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[11] = !accordionStates[11]" [attr.aria-expanded]="!accordionStates[11]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      بعد بيع التذكرة، كيف يتم تحويل المبلغ؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[11]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            بعد نهاية الفعالية يتم تحويل الرصيد للمحفظة , بإمكانك زيارة محفظتك من خلال لوحة تحكم البائع ومن ثم إضافة
+            بياناتك البنكية وطلب تحويل المبلغ لحسابك البنكي ( تستغرق عملية تحويل المبلغ 2-3 أيام ) من بعد نهاية الفعالية
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[12] = !accordionStates[12]" [attr.aria-expanded]="!accordionStates[12]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      هل بومب تيكت موقع رسمي و معتمد؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[12]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            بومب تيكت موقع رسمي و معتمد تابع ل مؤسسة ريادة الآفاق للتسويق الإلكتروني وتمتلك سجل تجاري سعودي في وزارة
+            التجارة برقم 1010796863.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bg-white ui-bordered mb-2">
+    <a (click)="accordionStates[13] = !accordionStates[13]" [attr.aria-expanded]="!accordionStates[13]"
+      href="javascript:void(0)" class="d-flex justify-content-between text-dark py-3 px-4" data-toggle="collapse">
+      استفسارك غير موجود ؟
+      <span class="collapse-icon"></span>
+    </a>
+    <div [ngbCollapse]="accordionStates[13]" class="collapse text-muted">
+      <div class="px-4 pb-3">
+        <ul>
+          <li>
+            اسألنا على واتساب او تويتر او إحدى منصاتنا في وسائل التواصل الاجتماعي وسيتواصل معك فريق العمل بشكل سريع
+            ويتجاوبون على جميع الاستفسارات في العام او الخاص
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<app-footer></app-footer>

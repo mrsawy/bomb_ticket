@@ -1,0 +1,231 @@
+<app-navbar></app-navbar>
+<div class="container-fluid mt-4 mb-4">
+  <!-- <div class="main-div"> -->
+  <div class="left-col">
+    <!-- Description -->
+    <div class="card mb-2">
+      <h6 class="card-header">{{ eventData?.title }}</h6>
+      <div class="card-body">
+        <img *ngIf="eventData?.eventImg" style="filter: brightness(55%); width: 100%" [src]="url + eventData?.eventImg"
+          class="img-fluid" />
+        <div class="content">
+          <h5>{{eventData?.dateTime | myDateTime}}</h5>
+          <h5>
+            <span> {{ eventData?.subtitle }}</span>
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-2 d-block w-100">
+      <div class="card-header">
+        <h6 class="d-inline-block mb-0">{{"Ticket_Detail.Location" | translate }}</h6>
+        <ng-container *ngIf="eventData?.location">
+          &nbsp;
+          <small>({{eventData?.location}})</small>
+        </ng-container>
+      </div>
+      <div class="card-body text-center">
+        <img *ngIf="eventData?.locationImg" [src]="url + eventData?.locationImg" class="img-fluid">
+      </div>
+    </div>
+    <div class="card mb-4 d-block w-100">
+      <div class="card-header">
+        <h6 class="d-inline-block mb-0">{{"Ticket_Detail.TermsConditions" | translate }}</h6>
+      </div>
+      <div class="card-body text-justify">
+        {{eventData?.termsAndCondition}}
+      </div>
+    </div>
+  </div>
+
+  <div class="right-col">
+
+    <div class="card ticket-card">
+
+      <div class="card-header font-weight-bold">{{"Ticket_Detail.Ticket" | translate }}</div>
+
+      <div class="card-body" *ngIf="allTickets.length == 0">
+        <h4 class="text-center text-danger my-3">
+          {{"Ticket_Detail.NoTicketIn" | translate }} {{ eventData?.title }}
+        </h4>
+      </div>
+
+      <ng-container *ngIf="allTickets.length != 0">
+
+        <!-- Table controls -->
+        <div class="card-body">
+
+          <div class="row">
+            <div class="col">
+              {{ "Ticket_Detail.Perpage" | translate }}: &nbsp;
+              <select [(ngModel)]="perPage" (change)="update()"
+                class="custom-select custom-select-sm d-inline-block w-auto">
+                <option *ngFor="let limit of [10, 20, 30, 40, 50]">{{limit}}</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+        <!-- / Table controls -->
+
+        <!-- Table -->
+        <hr class="border-light m-0">
+        <!-- <div class="ticket-table-div"> -->
+        <table class="table table-striped table-bordered card-table">
+          <thead>
+            <tr>
+              <th class="text-center align-middle">
+                #
+              </th>
+              <th class="text-center align-middle">
+                {{ "Ticket_Detail.TicketTier" | translate }}
+              </th>
+              <th class="text-center align-middle">
+                {{ "Ticket_Detail.Available" | translate }}
+              </th>
+              <th class="text-center align-middle">{{ "Ticket_Detail.Sold" | translate }}</th>
+              <th class="text-center align-middle">
+                {{ "Ticket_Detail.PriceperTicket" | translate }}
+                <!-- <br>
+                    (<small>{{ "Ticket_Detail.IncludingTax" | translate }}</small>) -->
+              </th>
+              <th class="text-center align-middle">
+                {{ "Ticket_Detail.besideEachOther" | translate }}
+              </th>
+              <th class="text-center align-middle">{{ "Ticket_Detail.Actions" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="allTickets.length > 0">
+            <tr *ngFor="let item of allTickets; index as i">
+              <td class="align-middle text-center">{{i + 1}}</td>
+              <td class="align-middle text-center">
+                {{ item?.ticket_section?.name }}
+              </td>
+              <td class="align-middle text-center">
+                {{item?.approvedTickets}}
+              </td>
+              <td class="align-middle text-center">
+                {{item?.soldTickets}}
+              </td>
+              <td class="align-middle text-center">
+                {{ priceReturn(item?.price)?.finalPrice }}
+                <b>{{ "Ticket_Detail.SAR" | translate }}</b>
+              </td>
+              <td class="align-middle text-center">
+                {{ (item?.isBesideEachOther ? 'Ticket_Detail.Yes' : 'Ticket_Detail.No') | translate }}
+              </td>
+              <td class="align-middle text-center">
+                <button *ngIf="item?.approvedTickets" class="btn btn-dark" (click)="buyTicket(purchaseModal, item)">
+                  {{ "Ticket_Detail.Buy" | translate }}
+                </button>
+                <button disabled *ngIf="!item?.approvedTickets" class=" btn btn-sm btn-danger">
+                  {{ "Ticket_Detail.SoldOut" | translate }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- </div> -->
+        <!-- / Table -->
+
+        <!-- Pagination -->
+        <div class="card-body py-0">
+
+          <div class="row">
+            <div class="col-sm text-sm-left text-center pt-3">
+              <span class="text-muted" *ngIf="totalItems">{{ "Ticket_Detail.Page" | translate }} {{ currentPage }}
+                {{ "Ticket_Detail.of" | translate }} {{ totalPages }}</span>
+            </div>
+            <div class="col-sm pt-3">
+              <ngb-pagination [collectionSize]="totalItems" [pageSize]="perPage" [maxSize]="1" [(page)]="currentPage"
+                (pageChange)="update()" size="sm" class="d-flex justify-content-center justify-content-sm-end m-0">
+              </ngb-pagination>
+            </div>
+          </div>
+
+        </div>
+
+      </ng-container>
+      <!-- / Pagination -->
+    </div>
+
+
+  </div>
+  <!-- </div> -->
+</div>
+
+
+<app-footer></app-footer>
+
+<ng-template #loginRegisterModal>
+  <app-auth></app-auth>
+</ng-template>
+
+<ng-template #purchaseModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="editLabel">
+      {{ "Ticket_Detail.howManyTicketsDoYouWantToBuy" | translate }}
+    </h5>
+    <button type="button" class="close" (click)="modal.dismiss()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body p-0">
+    <form>
+      <fieldset class="row m-4">
+        <div class="number-picker">
+          <ng-number-picker min="1" [max]="ticketData.approvedTickets" (valueChange)="selectQuantity($event)">
+          </ng-number-picker>
+        </div>
+      </fieldset>
+      <div class="card">
+        <h6 class="card-header">{{ "Ticket_Detail.Summary" | translate }}</h6>
+        <div class="card-body">
+          <h6>
+            {{ "Ticket_Detail.TicketTier" | translate }}
+            <span class="font-weight-normal">: {{ purchaseData?.ticket_section?.name }}
+            </span>
+          </h6>
+          <h6>
+            {{ "Ticket_Detail.Ticket" | translate }}
+            <span class="font-weight-normal">: {{ purchaseData?.qty }}
+              <small>x</small> SAR
+              {{ purchaseData?.price }}
+            </span>
+          </h6>
+          <!-- <hr class="border-light m-0" /> -->
+          <!-- <div> -->
+          <h5 class="">
+            {{ "Ticket_Detail.TotalPrice" | translate }}: <span class="font-weight-normal"><b>SAR</b> {{
+              purchaseData?.finalPrice }}</span>
+          </h5>
+          <!-- <p class="m-0"></p> -->
+          <!-- </div> -->
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="modal.dismiss()">
+          {{ "Ticket_Detail.Close" | translate }}
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="!purchaseData?.qty" (click)="onContinue()">
+          {{ "Ticket_Detail.AddmyInfo" | translate }}
+        </button>
+
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
+
+<swal #unknownBuyDialog
+  [options]="{ title: ('Ticket_Detail.LoginOrRegister' | translate), text: ('Ticket_Detail.PleaseLoginOrRegisterToPurchaseTicket' | translate), type: 'warning',showCloseButton: true, confirmButtonClass: 'btn btn-lg btn-warning', confirmButtonText: ('Ticket_Detail.LoginRegister' | translate) }"
+  (confirm)="openLoginModal(loginRegisterModal)">
+</swal>
+
+
+<swal #cannotPurchaseDialog
+  [options]="{ title: ('Ticket_Detail.CannotPurchase' | translate), text: ('Ticket_Detail.YouCannotPurchaseYourOwnTicket' | translate), type: 'warning',showCloseButton: true, confirmButtonClass: 'btn btn-lg btn-warning', confirmButtonText: ('Ticket_Detail.Ok' | translate) }">
+</swal>

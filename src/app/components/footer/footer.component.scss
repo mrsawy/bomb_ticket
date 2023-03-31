@@ -1,0 +1,34 @@
+.footer {
+  background-color: #00005C;
+  color: white;
+}
+
+.img {
+  width: 30px;
+}
+
+.change_lang_btn {
+  border-radius: 13px;
+
+  img {
+    width: 25px;
+    height: 25px;
+    margin-right: 7px;
+    object-fit: cover;
+  }
+}
+
+.imgPayment {
+  width: 155px;
+  height: 25px;
+  object-fit: contain;
+}
+
+.payment-method-div {
+  img {
+    width: 100%;
+    max-width: 50px;
+    display: inline-block;
+    margin: 5px;
+  }
+}

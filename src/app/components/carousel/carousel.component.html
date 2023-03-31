@@ -1,0 +1,20 @@
+<div *ngIf="loading" class="sk-bars-loading">
+  <div class="sk-wave">
+    <div class="sk-rect sk-rect1"></div>
+    <div class="sk-rect sk-rect2"></div>
+    <div class="sk-rect sk-rect3"></div>
+    <div class="sk-rect sk-rect4"></div>
+    <div class="sk-rect sk-rect5"></div>
+  </div>
+</div>
+
+
+<div id="my-carousel-div">
+
+  <ngb-carousel *ngIf="!loading">
+    <ng-template ngbSlide *ngFor="let item of images">
+      <img [src]="url + item?.image" />
+    </ng-template>
+  </ngb-carousel>
+
+</div>

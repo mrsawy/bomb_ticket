@@ -1,0 +1,371 @@
+<div *ngIf="myTool.myAlertShow" id="new-alert-div" class="animate__animated mx-4 mt-2"
+  [ngClass]="myTool.myAlertClass ? 'animate__fadeIn' : 'animate__fadeOut'">
+  <ngb-alert [dismissible]="false" [type]="myTool.myAlertType">
+    {{ myTool.myAlertMessage }}
+  </ngb-alert>
+</div>
+
+
+<div class="card-body pb-2">
+  <div class="demo-vertical-spacing" id="nav-dropdowns-demo">
+    <ul class="nav nav-tabs nav-responsive-xl">
+      <li class="nav-item">
+        <a [class]="
+            activeTabTicket == 'Pending'
+              ? 'active nav-link text-warning'
+              : 'nav-link text-warning'
+          " (click)="tabChangeTicket('Pending')" href="javascript:void(0)">
+          {{ "myTicket.Pending" | translate }} &nbsp;
+          <span *ngIf="pendingTicket.length != 0" class="badge badge-outline-warning">{{ pendingTicket.length }}</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a [class]="
+            activeTabTicket == 'approved'
+              ? 'active nav-link text-primary'
+              : 'nav-link text-primary'
+          " (click)="tabChangeTicket('approved')" href="javascript:void(0)">
+          {{ "myTicket.Approved" | translate }} &nbsp;
+          <span *ngIf="approvedTicket.length !== 0" class="badge badge-outline-primary text-primary">{{
+            approvedTicket.length }}</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a [class]="
+            activeTabTicket == 'Sold'
+              ? 'active nav-link text-secondary'
+              : 'nav-link text-secondary'
+          " (click)="tabChangeTicket('Sold')" href="javascript:void(0)">
+          {{ "myTicket.Sold" | translate }} &nbsp;
+          <span *ngIf="soldTicket?.length !== 0" class="badge badge-outline-secondary">{{ soldTicket?.length
+            }}</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a [class]="
+            activeTabTicket == 'Rejected'
+              ? 'active nav-link text-danger'
+              : 'nav-link text-danger'
+          " (click)="tabChangeTicket('Rejected')" href="javascript:void(0)">
+          {{ "myTicket.Rejected" | translate }} &nbsp;
+          <span *ngIf="rejectedTicket.length !== 0" class="badge badge-outline-danger">{{ rejectedTicket.length
+            }}</span>
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+
+      
+        </li> -->
+    </ul>
+  </div>
+
+  <div class="card p-3" *ngIf="loading">
+    <div class="sk-wave sk-primary">
+      <div class="sk-rect sk-rect1"></div>
+      <div class="sk-rect sk-rect2"></div>
+      <div class="sk-rect sk-rect3"></div>
+      <div class="sk-rect sk-rect4"></div>
+      <div class="sk-rect sk-rect5"></div>
+    </div>
+    <h5 class="text-center mb-0">{{ "order.loading" | translate }}</h5>
+  </div>
+
+  <div class="card" *ngIf="!loading && activeTabTicket == 'approved'">
+    <h3 *ngIf="approvedTicket.length === 0" class="text-center my-5 text-capitalize">
+      <i class="fas fa-ticket-alt mb-3" style="font-size: 40px"></i>
+      <br />
+      {{ "myTicket.No" | translate }}
+      <span class="text-primary"> {{ "myTicket.Approved" | translate }}</span>
+      {{ "myTicket.ticketFound" | translate }}
+    </h3>
+
+    <div class="table-responsive">
+      <table *ngIf="approvedTicket.length !== 0" class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">{{ "myTicket.price" | translate }}</th>
+            <th scope="col">{{ "myTicket.tax" | translate }} ({{ticketTaxPercentage}}%)</th>
+            <th scope="col">{{ "myTicket.finalPrice" | translate }}</th>
+            <th scope="col">{{ "myTicket.event" | translate }}</th>
+            <th scope="col">{{ "myTicket.ticket" | translate }}</th>
+            <th scope="col">{{ "myTicket.Actions" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of approvedTicket; index as i">
+            <th scope="row">{{ i + 1 }}</th>
+            <td class="align-middle">{{priceReturn(item?.sell_ticket?.price)?.price}} SAR</td>
+            <td class="align-middle">{{priceReturn(item?.sell_ticket?.price)?.tax}} SAR</td>
+            <td class="align-middle">{{priceReturn(item?.sell_ticket?.price)?.finalPrice}} SAR</td>
+            <td class="align-middle">
+              <div class="media align-items-center">
+                <img *ngIf="item?.sell_ticket?.ticket_section?.event?.eventImg" class="ui-square-50"
+                  [src]=" url + item?.sell_ticket?.ticket_section?.event?.eventImg" />
+                <!-- Generate link to product here -->
+                <span class="media-body d-block text-dark ml-3">
+                  {{ item?.sell_ticket?.ticket_section?.event?.title | titlecase }}
+                </span>
+              </div>
+            </td>
+            <td class="align-middle">
+              <a target="blank" [href]="url + item.image" class="btn btn-default btn-xs md-btn-flat py-2">
+                {{'myTicket.Download' | translate}}
+              </a>
+            </td>
+            <td class="align-middle">
+              <button class="btn btn-sm btn-outline-primary m-1" (click)="editTicket(ticketModal, item, i)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger m-1" (click)="deleteTicket(item, i); deleteDialog.show()">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="!loading && activeTabTicket == 'Pending'">
+    <h3 *ngIf="pendingTicket.length === 0" class="text-center my-5 text-capitalize">
+      <i class="fas fa-ticket-alt mb-3" style="font-size: 40px"></i>
+      <br />
+      {{ "myTicket.No" | translate }}
+      <span class="text-primary"> {{ "myTicket.Pending" | translate }}</span>
+      {{ "myTicket.ticketFound" | translate }}
+    </h3>
+    <!-- <div  class="text-center mx-auto mt-3">
+        <button type="button" class="btn btn-primary" (click)="createTicket()">
+          Add Ticket</button
+          >&nbsp;
+        </div> -->
+    <!-- <div *ngIf="pendingTicket.length !== 0" class="text-right m-3 mb-0">
+      <button type="button" class="btn btn-primary" (click)="createTicket()">
+        Add Ticket</button
+        >&nbsp;
+      </div> -->
+    <div class="table-responsive">
+      <table *ngIf="pendingTicket.length !== 0" class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">{{ "myTicket.price" | translate }}</th>
+            <th scope="col">{{ "myTicket.tax" | translate }} ({{ticketTaxPercentage}}%)</th>
+            <th scope="col">{{ "myTicket.finalPrice" | translate }}</th>
+            <th scope="col">{{ "myTicket.event" | translate }}</th>
+            <th scope="col">{{ "myTicket.ticket" | translate }}</th>
+            <th scope="col">{{ "myTicket.Actions" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of pendingTicket; index as i">
+            <th scope="row">{{ i + 1 }}</th>
+            <td class="align-middle">{{priceReturn(item?.sell_ticket?.price)?.price}} SAR</td>
+            <td class="align-middle">{{priceReturn(item?.sell_ticket?.price)?.tax}} SAR</td>
+            <td class="align-middle">{{priceReturn(item?.sell_ticket?.price)?.finalPrice}} SAR</td>
+            <td class="align-middle">
+              <div class="media align-items-center">
+                <img *ngIf="item?.sell_ticket?.ticket_section?.event?.eventImg" class="ui-square-50"
+                  [src]=" url + item?.sell_ticket?.ticket_section?.event?.eventImg" />
+                <!-- Generate link to product here -->
+                <span class="media-body d-block text-dark ml-3">
+                  {{ item?.sell_ticket?.ticket_section?.event?.title | titlecase }}
+                </span>
+              </div>
+            </td>
+            <td class="align-middle">
+              <a target="blank" [href]="url + item.image" class="btn btn-default btn-xs md-btn-flat py-2">
+                {{'myTicket.Download' | translate}}
+              </a>
+            </td>
+            <td class="align-middle">
+              <button class="btn btn-sm btn-outline-primary m-1" (click)="editTicket(ticketModal, item, i)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger m-1" (click)="deleteTicket(item, i); deleteDialog.show()">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card" *ngIf="!loading && activeTabTicket == 'Rejected'">
+  <h3 *ngIf="rejectedTicket.length === 0" class="text-center my-5 text-capitalize">
+    <i class="fas fa-ticket-alt mb-3" style="font-size: 40px"></i>
+    <br />
+    {{ "myTicket.No" | translate }}
+    <span class="text-primary"> {{ "myTicket.Rejected" | translate }}</span>
+    {{ "myTicket.ticketFound" | translate }}
+  </h3>
+
+  <div class="table-responsive">
+    <table *ngIf="rejectedTicket.length !== 0" class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">{{ "myTicket.price" | translate }}</th>
+          <th scope="col">{{ "myTicket.tax" | translate }} ({{ticketTaxPercentage}}%)</th>
+          <th scope="col">{{ "myTicket.finalPrice" | translate }}</th>
+          <th scope="col">{{ "myTicket.event" | translate }}</th>
+          <th scope="col">{{ "myTicket.ticket" | translate }}</th>
+          <th scope="col">{{ "myTicket.reason" | translate }}</th>
+          <th scope="col">{{ "myTicket.Actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of rejectedTicket; index as i">
+          <th scope="row">{{ i + 1 }}</th>
+          <td class="align-middle">{{priceReturn(item?.sell_ticket?.price)?.price}} SAR</td>
+          <td class="align-middle">{{priceReturn(item?.sell_ticket?.price)?.tax}} SAR</td>
+          <td class="align-middle">{{priceReturn(item?.sell_ticket?.price)?.finalPrice}} SAR</td>
+          <td class="align-middle">
+            <div class="media align-items-center">
+              <img *ngIf="item?.sell_ticket?.ticket_section?.event?.eventImg" class="ui-square-50"
+                [src]=" url + item?.sell_ticket?.ticket_section?.event?.eventImg" />
+              <!-- Generate link to product here -->
+              <span class="media-body d-block text-dark ml-3">
+                {{ item?.sell_ticket?.ticket_section?.event?.title | titlecase }}
+              </span>
+            </div>
+          </td>
+          <td class="align-middle">
+            <a target="blank" [href]="url + item.image" class="btn btn-default btn-xs md-btn-flat py-2">
+              {{'myTicket.Download' | translate}}
+            </a>
+          </td>
+          <td [class]="
+              item?.rejectedReason == null
+                ? 'align-middle text-danger'
+                : 'align-middle'
+            ">
+            {{
+            item?.rejectedReason == null
+            ? ('myTicket.noReasonFound' | translate)
+            : item?.rejectedReason
+            }}
+          </td>
+          <td class="align-middle">
+            <button class="btn btn-sm btn-outline-primary m-1" (click)="editTicket(ticketModal, item, i)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger m-1" (click)="deleteTicket(item, i); deleteDialog.show()">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card" *ngIf="!loading && activeTabTicket == 'Sold'">
+  <h3 *ngIf="soldTicket.length === 0" class="text-center my-5 text-capitalize">
+    <i class="fas fa-ticket-alt mb-3" style="font-size: 40px"></i>
+    <br />
+    {{ "myTicket.No" | translate }}
+    <span class="text-primary"> {{ "myTicket.Sold" | translate }}</span>
+    {{ "myTicket.ticketFound" | translate }}
+  </h3>
+
+  <div class="table-responsive">
+    <table *ngIf="soldTicket.length !== 0" class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">{{ "myTicket.price" | translate }}</th>
+          <th scope="col">{{ "myTicket.tax" | translate }}</th>
+          <th scope="col">{{ "myTicket.finalPrice" | translate }}</th>
+          <th scope="col">{{ "myTicket.event" | translate }}</th>
+          <th scope="col">{{ "myTicket.ticket" | translate }}</th>
+          <th scope="col">{{ "myTicket.Sold" | translate }}</th>
+          <th scope="col">{{ "myTicket.Actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of soldTicket; index as i">
+          <th scope="row">{{ i + 1 }}</th>
+
+          <td class="align-middle">{{item?.price}} SAR</td>
+          <td class="align-middle">{{item?.tax}} SAR</td>
+          <td class="align-middle">{{item?.finalPrice}} SAR</td>
+          <td class="align-middle">
+            <div class="media align-items-center">
+              <img *ngIf="item?.sell_ticket?.ticket_section?.event?.eventImg" class="ui-square-50"
+                [src]=" url + item?.sell_ticket?.ticket_section?.event?.eventImg" />
+              <!-- Generate link to product here -->
+              <span class="media-body d-block text-dark ml-3">
+                {{ item?.sell_ticket?.ticket_section?.event?.title | titlecase }}
+              </span>
+            </div>
+          </td>
+          <td class="align-middle">
+            <a target="blank" [href]="url + item.image" class="btn btn-default btn-xs md-btn-flat py-2">
+              {{'myTicket.Download' | translate}}
+            </a>
+          </td>
+          <td class="align-middle">
+            <span class="hidden-date">{{item?.updatedAt}}</span>
+            {{item?.updatedAt | date: 'mediumDate'}}<br>
+            {{item?.updatedAt | date: 'mediumTime'}}
+          </td>
+          <td class="align-middle text-center">
+            <!-- <button class="btn btn-sm btn-outline-primary m-1" (click)="editTicket(ticketModal, item, i)">
+              <i class="fas fa-edit"></i>
+            </button> -->
+            <!-- <button class="btn btn-sm btn-outline-danger m-1" (click)="deleteTicket(item, i); deleteDialog.show()">
+              <i class="fas fa-trash"></i>
+            </button> -->
+            <span>-</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+<ng-template #ticketModal let-c="close" let-d="dismiss">
+
+  <div class="modal-header">
+    <h5 class="modal-title">
+      Edit Ticket Price
+    </h5>
+    <button type="button" class="close" (click)="d('Cross click')">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label [class]="isArLng() ? 'form-label text-right d-block' : 'form-label'">{{ "sellTicket.ticketPrice" |
+          translate }}
+          <span *ngIf="priceReturn(sellTicketPrice)?.finalPrice">
+            ({{ "sellTicket.includingTax" | translate }} {{ticketTaxPercentage}}% :
+            {{priceReturn(sellTicketPrice)?.finalPrice}})
+          </span>
+        </label>
+        <input type="number" [(ngModel)]="sellTicketPrice" class="form-control" placeholder="100">
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-primary" (click)="onUpdateTicket()">
+      Update Ticket
+    </button>
+    <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button>
+  </div>
+
+
+</ng-template>
+
+
+
+<swal #deleteDialog
+  [options]="{ title: ('General.AreYouSure'|translate), text: ('General.YouWouldNotBeAbleToRevertThis'|translate), type: 'warning', showCancelButton: true, confirmButtonText: ('General.YesDeleteIt'|translate), showCloseButton: true, confirmButtonClass: 'btn btn-lg btn-warning', cancelButtonText:('General.Cancel'|translate) }"
+  (confirm)="onDeleteTicket()"></swal>

@@ -1,0 +1,50 @@
+<div *ngIf="myTool.myAlertShow" id="my-alert-div"
+  [class]="isArLng()?'text-right animate__animated mx-4 mt-2 ':'animate__animated mx-4 mt-2'"
+  [ngClass]="myTool.myAlertClass ? 'animate__fadeIn' : 'animate__fadeOut'">
+  <ngb-alert [dismissible]="false" [type]="myTool.myAlertType">
+    {{ myTool.myAlertMessage }}
+  </ngb-alert>
+</div>
+<div class="card-body media align-items-center">
+  <img [src]="profileImage() ? url +  profileImage() :'assets/img/person.png'" alt="" class="d-block ui-w-80" />
+  <div class="media-body ml-4">
+    <button type="button" (click)="fileBtn()" class="btn btn-outline-primary">
+      {{'myProfile.uploadNewPhoto' | translate}}
+    </button>
+    <input type="file" id="uploadFile" value="p2 from my local computer" (change)="onFileChange($event)"
+      style="display: none" />
+    &nbsp;
+  </div>
+</div>
+<hr class="border-light m-0" />
+
+<div class="card-body">
+
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 p-0">
+      <div class="form-group my-2 p-1">
+        <label [class]="isArLng()?'text-right form-label pl-0':'form-label pl-0'">{{'myProfile.firstName' | translate}}
+        </label>
+        <input type="text" name="firstName" [(ngModel)]="firstName" class="form-control" />
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 p-0">
+      <div class="form-group my-2 p-1">
+        <label [class]="isArLng()?'text-right form-label pl-0':'form-label pl-0'">{{'myProfile.lastName' | translate}}
+        </label>
+        <input type="text" name="lastName" [(ngModel)]="lastName" class="form-control" />
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 p-0">
+      <div class="form-group my-2 p-1">
+        <label [class]="isArLng()?'text-right form-label d-block':'form-label'">{{'myProfile.Phone' |
+          translate}}</label>
+        <input type="tel" class="form-control" name="phoneNumber" [(ngModel)]="phoneNumber" />
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 p-0 text-right">
+      <button type="button" class="btn btn-primary" style="margin-top: 37px;" (click)="updateBtn()">
+        {{'myProfile.editProfile' | translate}}</button>&nbsp;
+    </div>
+  </div>
+</div>

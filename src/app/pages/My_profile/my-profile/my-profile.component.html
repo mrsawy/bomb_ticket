@@ -1,0 +1,52 @@
+<!-- <app-navbar></app-navbar> -->
+
+<div>
+  <div [class]="innerWidth < 425 ? 'px-3 pt-2 mb-2' : 'px-5 pt-2 mb-2'">
+    <div class="head">
+      <h4 class="font-weight-bold py-3 mb-4">{{ curTabRetruner() }}</h4>
+      <!-- <button
+    class="menubtn btn btn-outline-secondary"
+    type="button"
+    (click)="toggleSidenav()"
+  >
+  <i class="fas fa-bars"></i>
+  </button> -->
+    </div>
+
+    <div class="card overflow-hidden">
+      <div class="row no-gutters row-bordered row-border-light">
+
+        <!-- my Profile -->
+        <div class="col-xl-12 col-lg-12 col-md-12" *ngIf="curTab === 'My profile'">
+          <app-profile></app-profile>
+        </div>
+        <!-- my Wallet -->
+        <div class="col-xl-12 col-lg-12 col-md-12" *ngIf="curTab === 'My Wallet'">
+          <app-my-wallet></app-my-wallet>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12" *ngIf="curTab === 'Seller Order'">
+          <app-seller-order></app-seller-order>
+        </div>
+        <!-- Dashboard-->
+        <div class="col-xl-12 col-lg-12 col-md-12" *ngIf="curTab === 'Seller Dashboard'">
+          <app-seller-dashboard></app-seller-dashboard>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12" *ngIf="curTab === 'My Ticket'">
+          <app-my-ticket></app-my-ticket>
+        </div>
+        <!-- Order -->
+        <div class="col-xl-12 col-lg-12 col-md-12" *ngIf="curTab === 'Order'">
+          <app-my-order></app-my-order>
+        </div>
+        <!-- Order -->
+        <div class="col-xl-12 col-lg-12 col-md-12" *ngIf="curTab === 'Coupons'">
+          <app-my-coupons></app-my-coupons>
+        </div>
+        <!-- Change Password -->
+        <div class="col-xl-12 col-lg-12 col-md-12" *ngIf="curTab === 'Change password'">
+          <app-change-password></app-change-password>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <app-footer></app-footer> -->

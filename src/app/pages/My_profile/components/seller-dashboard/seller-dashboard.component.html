@@ -1,0 +1,201 @@
+<div class="card-body pb-2">
+  <div class="row">
+    <div class="col-sm-6 col-xl-3">
+      <div class="card mb-4" style="box-shadow: 0px 0px 7px 7px whitesmoke">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <i class="lnr lnr-cart display-4 text-success"></i>
+            <div class="ml-3">
+              <div class="text-muted small">{{'sellerDashboard.totalEarnings' | translate}}</div>
+              <div>{{ dashboardData?.totalEarningOSellers }} <b>SAR</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <div class="card mb-4" style="box-shadow: 0px 0px 7px 7px whitesmoke">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <i class="lnr lnr-cart display-4 text-info"></i>
+            <div class="ml-3">
+              <div class="text-muted small">{{'sellerDashboard.monthlyEarning' | translate}}</div>
+              <div>{{ dashboardData?.totalEarningOSellersThisMouth }} <b>SAR</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <div class="card mb-4" style="box-shadow: 0px 0px 7px 7px whitesmoke">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-ticket-alt text-danger" style="font-size: 25px"></i>
+            <div class="ml-3">
+              <div class="text-muted small">{{'sellerDashboard.totalTicket' | translate}}</div>
+              <div>{{ dashboardData?.getAllSellerTicketCount }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <div class="card mb-4" style="box-shadow: 0px 0px 7px 7px whitesmoke">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-file-invoice-dollar text-warning" style="font-size: 25px"></i>
+            <div class="ml-3">
+              <div class="text-muted small">{{'sellerDashboard.totalOrder' | translate}}</div>
+              <div>{{ dashboardData?.getAllSellerOrderCount }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h5 class="text-muted font-weight-normal mb-2">{{'sellerDashboard.TicketStatistics' | translate}}</h5>
+  <hr class="border-light my-3" />
+  <div class="row">
+    <div class="col-xl-5">
+      <!-- Stats + Links -->
+      <div class="card d-flex w-100">
+        <div class="row row-bordered row-border-light h-100">
+          <div class="d-flex col-sm-6 col-md-12 col-lg-12 align-items-center">
+            <a href="javascript:void(0)" class="card-body media align-items-center text-dark">
+              <i class="fas fa-hourglass-half text-warning" style="font-size: 30px"></i>
+              <span class="media-body d-block ml-3">
+                <div class="text-muted small">{{'sellerDashboard.pending' | translate}}</div>
+                <div class="text-large">
+                  {{ dashboardData?.pendingTicketCount }}
+                </div>
+              </span>
+            </a>
+          </div>
+          <div class="d-flex col-sm-6 col-md-12 col-lg-12 align-items-center">
+            <a href="javascript:void(0)" class="card-body media align-items-center text-dark">
+              <i class="far fa-check-square text-success" style="font-size: 30px"></i>
+              <span class="media-body d-block ml-3">
+                <div class="text-muted small">{{'sellerDashboard.approved' | translate}}</div>
+                <div class="text-large">
+                  {{ dashboardData?.approvedTicketCount }}
+                </div>
+              </span>
+            </a>
+          </div>
+          <div class="d-flex col-sm-6 col-md-12 col-lg-12 align-items-center">
+            <a href="javascript:void(0)" class="card-body media align-items-center text-dark">
+              <i class="far fa-window-close text-danger" style="font-size: 30px"></i>
+              <span class="media-body d-block ml-3">
+                <div class="text-muted small">{{'sellerDashboard.rejected' | translate}}</div>
+                <div class="text-large">
+                  {{ dashboardData?.rejectedTicketCount }}
+                </div>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- / Stats + Links -->
+    </div>
+    <div class="col-xl-7">
+      <!-- Type gadgets chart -->
+      <div class="card mb-4">
+        <!-- <h6 class="card-header with-elements">
+          <div class="card-header-title">{{'sellerDashboard.ticketStatus' | translate}}</div>
+        </h6> -->
+        <div class="py-4 px-3">
+          <div id="chart">
+            <canvas baseChart height="182" [datasets]="chart6Data" [labels]="chart6Title" [options]="chart6Options"
+              [chartType]="'pie'" [colors]="chart6Colors">
+            </canvas>
+          </div>
+        </div>
+      </div>
+      <!-- / Type gadgets chart -->
+    </div>
+  </div>
+  <!-- <h5 class="text-muted font-weight-normal mb-2">Order Status</h5> -->
+  <hr class="border-light my-3" />
+  <!-- <div class="row"> -->
+  <!--  <div class=" col-xl-5 ">
+  
+      <div class="card d-flex w-100 mb-4">
+        <div class="row no-gutters row-bordered row-border-light h-100">
+          <div class="d-flex col-sm-6 col-md-12 col-lg-12 align-items-center">
+  
+            <a href="javascript:void(0)" class="card-body media align-items-center text-dark">
+              <i class="fas fa-receipt text-primary" style="font-size: 30px"></i>
+              <span class="media-body d-block ml-3">
+                <div class="text-muted small">Sold</div>
+                <div class="text-large">{{dashboardData?.getSoldOderCount}}</div>
+              </span>
+            </a>
+  
+          </div>
+          <div class="d-flex col-sm-6 col-md-12 col-lg-12 align-items-center">
+  
+            <a href="javascript:void(0)" class="card-body media align-items-center text-dark">
+              <i class="fas fa-cart-arrow-down text-danger" style="font-size: 30px"></i>
+              <span class="media-body d-block ml-3">
+                <div class="text-muted small">Un Sold</div>
+                <div class="text-large">{{dashboardData?.getUnSoldOrderCount}}</div>
+              </span>
+            </a>
+  
+          </div>
+          <div class="d-flex col-sm-6 col-md-12 col-lg-12 align-items-center">
+  
+            <a href="javascript:void(0)" class="card-body media align-items-center text-dark">
+              <i class="far fa-window-close text-danger" style="font-size: 30px"></i>
+              <span class="media-body d-block ml-3">
+                <div class="text-muted small">Cancelled</div>
+                <div class="text-large">3</div>
+              </span>
+            </a>
+  
+          </div>
+        </div>
+      </div>
+  
+    </div>
+    <div class=" col-xl-7 ">
+      <div class="card mb-4">
+        <h6 class="card-header with-elements">
+          <div class="card-header-title">Order Stats</div>
+        </h6>
+        <div class="py-4 px-3">
+          <div id="chart">
+            <canvas
+              baseChart
+              height="182"
+              [datasets]="chartOrderData"
+              [labels]="['Sold', 'Un Sold' ]"
+              [options]="chartOrderOptions"
+              [chartType]="'doughnut'"
+              [colors]="chartOrderColorsOrder"
+            >
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  <!-- </div> -->
+  <!-- <div class="row no-gutters row-bordered">
+    <div class="col-12">
+      <div class="card-body">
+        <div style="height: 210px">
+          <canvas
+            baseChart
+            height="210"
+            [datasets]="chart1Data"
+            [labels]="chart1date"
+            [options]="chart1Options"
+            [chartType]="'line'"
+            [colors]="chart1Colors"
+          >
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div> -->
+</div>

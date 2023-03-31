@@ -1,0 +1,192 @@
+<nav class="footer navbar-fixed-bottom">
+  <div class="container text-center pb-4 pt-5">
+    <div class="row">
+      <div class="col-sm pb-2">
+        <!-- class="d-inline-block" -->
+        <a href="javascript:void(0)" class="navbar-brand p-0 mb-3" href="#" style="display: flex">
+          <img src="assets/img/bomb-ticket-logo-transparent.png" alt="" width="100" height="60" />
+          <!-- {{ "Footer.bombTicket" | translate }} -->
+        </a>
+        <div [class]="
+            isArLng() ? 'd-block pb-2 text-right' : 'd-block pb-2 text-left'
+          ">
+          {{ "Footer.bombTicketDetail" | translate }}
+        </div>
+        <div [class]="
+            isArLng() ? 'd-block pb-2 text-right' : 'd-block pb-2 text-left'
+          ">
+          <!-- {{isArLng() ? '4249 323 59 966+':'+966 59 323 4249'}}   -->
+          {{isArLng() ? '1126 375 55 966+':'+966 55 375 1126'}}
+          <!-- <br>
+        +966 55 375 1126 -->
+        </div>
+        <div [class]="
+            isArLng() ? 'd-block pb-2 text-right' : 'd-block pb-2 text-left'
+          ">
+          info@bombticket.com
+        </div>
+        <br />
+        <div [class]="
+            isArLng() ? 'd-block pb-2 text-right' : 'd-block pb-2 text-left'
+          ">
+          <a (click)="changeLanguageBtn('en')" class="btn change_lang_btn mr-2 btn-default btn-xs md-btn-flat py-2">
+            <img src="../../../assets/img/english_logo.png" alt="" />
+            {{ "Navbar.English" | translate }}
+          </a>
+          <a (click)="changeLanguageBtn('ar')" class="btn change_lang_btn btn-default btn-xs md-btn-flat py-2">
+            <img src="../../../assets/img/arabic_logo.png" alt="" />
+            {{ "Navbar.Arabic" | translate }}
+          </a>
+        </div>
+      </div>
+      <div class="col-sm pb-4">
+        <div [class]="
+            isArLng()
+              ? 'footer-text font-weight-bold text-right mb-3'
+              : 'footer-text font-weight-bold text-left mb-3'
+          ">
+          {{ "Footer.clientCare" | translate }}
+        </div>
+        <!-- <a href="javascript:void(0)" class="footer-link d-block pb-2 text-left">{{'Footer.SignUp' | translate}}</a> -->
+        <a href="javascript:void(0)" [class]="
+            isArLng()
+              ? 'footer-link d-block pb-2 text-right'
+              : 'footer-link d-block pb-2 text-left'
+          " (click)="openModal(editModal, null, null)">{{ "Footer.contactUs" | translate }}</a>
+        <a href="javascript:void(0)" routerLink="/faq" [class]="
+            isArLng()
+              ? 'footer-link d-block pb-2 text-right'
+              : 'footer-link d-block pb-2 text-left'
+          ">{{ "Footer.faqs" | translate }}</a>
+      </div>
+      <div class="col-sm pb-4">
+        <div [class]="
+            isArLng()
+              ? 'footer-text font-weight-bold text-right mb-3'
+              : 'footer-text font-weight-bold text-left mb-3'
+          ">
+          {{ "Footer.Corporate" | translate }}
+        </div>
+        <a href="javascript:void(0)" routerLink="/about" [class]="
+            isArLng()
+              ? 'footer-link d-block pb-2 text-right'
+              : 'footer-link d-block pb-2 text-left'
+          ">{{ "Footer.aboutUs" | translate }}</a>
+        <!-- <a href="javascript:void(0)" [class]="
+            isArLng()
+              ? 'footer-link d-block pb-2 text-right'
+              : 'footer-link d-block pb-2 text-left'
+          ">{{ "Footer.policy" | translate }}</a> -->
+        <a href="javascript:void(0)" routerLink="/terms-and-conditions" [class]="
+            isArLng()
+              ? 'footer-link d-block pb-2 text-right'
+              : 'footer-link d-block pb-2 text-left'
+          ">{{ "Footer.TermsConditions" | translate }}</a>
+      </div>
+      <div class="col-sm pb-4">
+        <div [class]="
+            isArLng()
+              ? 'footer-text font-weight-bold text-right mb-3'
+              : 'footer-text font-weight-bold text-left mb-3'
+          ">
+          <!-- {{ "Footer.NewsLetter" | translate }} -->
+          {{ "Footer.PaymentMethods" | translate }}
+        </div>
+        <!-- <a [class]="
+            isArLng()
+              ? 'footer-link d-block pb-2 text-right'
+              : 'footer-link d-block pb-2 text-left'
+          ">
+          {{
+          "Footer.subscribeToOurNewsletterToDiscoverOurPromotionAndLatestDesign"
+          | translate
+          }}
+        </a> -->
+        <div class="media align-items-center my-2">
+          <div class="payment-method-div">
+            <img src="assets/img/visa.png" />
+            <img src="assets/img/mada.png" />
+            <img src="assets/img/apple-pay.png" />
+          </div>
+        </div>
+        <div class="mb-4"></div>
+        <div class="media align-items-center">
+          <img class="img d-inline-block" src="assets/img/maroof-logo.png" />
+          <a target="_blank" href="https://maroof.sa/253277" class="footer-link d-inline ml-2">
+            {{ "Footer.Maroof" | translate }}
+          </a>
+        </div>
+        <div class="media align-items-center">
+          <img class="img d-inline-block" src="assets/img/WhatsApp.png" />
+          <!-- Generate link to product here -->
+          <!-- href="https://api.whatsapp.com/send/?phone=0966593234249&text&app_absent=0" -->
+          <!-- href="https://api.whatsapp.com/send/?phone=0966553751126&text&app_absent=0" -->
+          <a target="_blank" href="https://wa.me/message/QCUBJOVBT4M7J1" class="footer-link d-inline ml-2">{{
+            "Footer.whatsApp" | translate }}</a>
+        </div>
+        <div class="media align-items-center">
+          <img class="img d-inline-block" src="../../../assets/img/twitter.png" />
+          <!-- Generate link to product here -->
+          <a href="javascript:void(0)" href="javascript:void(0)" class="footer-link d-inline ml-2" target="_blank"
+            href="https://twitter.com/Bomb_Ticket">{{ "Footer.Twitter" | translate }}</a>
+        </div>
+        <div class="media align-items-center">
+          <img class="img d-inline-block" src="../../../assets/img/intsa.png" />
+          <!-- Generate link to product here -->
+          <a href="javascript:void(0)" href="javascript:void(0)" class="footer-link d-inline ml-2" target="_blank"
+            href="https://instagram.com/bomb_ticket?igshid=YmMyMTA2M2Y=">{{ "Footer.Instagram" | translate }}</a>
+        </div>
+        <div class="media align-items-center">
+          <img class="img d-inline-block" src="assets/img/tiktok-logo.png" />
+          <!-- Generate link to product here -->
+          <a href="javascript:void(0)" href="javascript:void(0)" class="footer-link d-inline ml-2" target="_blank"
+            href="https://www.tiktok.com/@bomb_ticket">{{ "Footer.tiktok" | translate }}</a>
+        </div>
+        <div class="media align-items-center">
+          <img class="img d-inline-block" src="assets/img/google.png" />
+          <!-- Generate link to product here -->
+          <a href="javascript:void(0)" href="javascript:void(0)" class="footer-link d-inline ml-2"
+            href="mailto:info@bombticket.com">{{ "Footer.Google" | translate }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<ng-template #editModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="editLabel">
+      {{ "Footer.contactUs" | translate }}
+    </h5>
+    <button type="button" class="close" (click)="modal.dismiss()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body p-0">
+    <form>
+      <div class="form-group row m-4">
+        <label class="font-weight-bold p-0">{{ "Footer.Email" | translate }}:</label>
+        <input type="text" [(ngModel)]="contactUs.email" name="email" placeholder="Enter your email"
+          class="form-control" />
+      </div>
+      <div class="form-group row m-4">
+        <label class="font-weight-bold p-0">{{ "Footer.Subject" | translate }}:</label>
+        <input type="text" [(ngModel)]="contactUs.subject" name="subject" class="form-control"
+          placeholder="Enter your subject" />
+      </div>
+      <div class="row m-4 form-group">
+        <label class="font-weight-bold p-0">{{ "Footer.Message" | translate }}:</label>
+        <textarea type="text" [(ngModel)]="contactUs.message" name="message" class="form-control"
+          placeholder="Enter your message"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">
+          {{ "Footer.Close" | translate }}
+        </button>
+        <button type="submit" class="btn btn-primary" (click)="contactBtn()">
+          {{ "Footer.sendMessage" | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

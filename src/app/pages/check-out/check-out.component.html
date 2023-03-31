@@ -1,0 +1,302 @@
+<app-navbar></app-navbar>
+<div class="container-fluid mt-4 p-5">
+  <div class="row">
+    <div class="col-md-8 col-xl-8" *ngIf="guestUser()">
+      <!-- Description -->
+      <div class="card mb-2">
+        <h6 class="card-header">
+          <div class="row">
+            <div class="col-1">
+              <a (click)="back()" class="back mr-3">
+                <i class="fas fa-chevron-left"></i></a>
+            </div>
+            <div class="col-11">
+              <span style="font-size: 17px">
+                {{ eventData?.eventDetail?.title }}
+              </span>
+              <br />
+              <span class="font-weight-normal mt-2">
+                <i class="far fa-clock text-success"></i>
+                {{eventData?.eventDetail?.dateTime | myDateTime }}</span>
+              <br />
+              <span class="font-weight-normal mt-2">
+                <i class="fa fa-street-view text-primary"></i>
+                {{ eventData?.eventDetail?.subtitle }} <br />
+                <i class="fa fa-map-marker-alt text-danger"></i>
+                {{ eventData?.eventDetail?.location }}</span>
+            </div>
+          </div>
+        </h6>
+        <div class="card-body">
+          <h5 class="text-center mb-3">
+            {{ "checkOut.howCanWeContactYou" | translate }}
+          </h5>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <label class="form-label">{{
+                  "checkOut.firstName" | translate
+                  }}</label>
+                <input type="tel" class="form-control" name="firstName" [(ngModel)]="orderData.firstName"
+                  [placeholder]="'checkOut.enterYourFirstName' | translate" />
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <label class="form-label">{{
+                  "checkOut.lastName" | translate
+                  }}</label>
+                <input type="tel" class="form-control" name="lastName" [(ngModel)]="orderData.lastName"
+                  [placeholder]="'checkOut.enterYourLastName' | translate" />
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <label class="form-label">{{
+                  "checkOut.email" | translate
+                  }}</label>
+                <input type="tel" class="form-control" name="email" readonly [(ngModel)]="orderData.email"
+                  [placeholder]="'checkOut.enterYourEmail' | translate" />
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <label class="form-label">{{
+                  "checkOut.phoneNumber" | translate
+                  }}</label>
+                <input type="tel" class="form-control" name="phoneNumber" [(ngModel)]="orderData.phoneNumber"
+                  [placeholder]="'checkOut.enterYourPhoneNumber' | translate" />
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h6 class="card-header">
+              {{ "checkOut.ticketSummary" | translate }}
+            </h6>
+            <div class="card-body">
+              <h6>
+                {{ "checkOut.ticketTier" | translate }}
+                <span class="font-weight-normal">
+                  : &nbsp; {{ eventData?.ticketDetail?.name }}
+                </span>
+              </h6>
+              <h6>
+                {{ "checkOut.ticket" | translate }}
+                <span class="font-weight-normal">
+                  : &nbsp; {{ eventData?.ticketDetail?.ticketLength }}x SAR
+                  {{ eventData?.ticketDetail?.ticketPrice }}
+                </span>
+              </h6>
+              <div *ngIf="myTool.myAlertShow" id="my-alert-div" class="animate__animated mx-4 mt-2" [ngClass]="
+              myTool.myAlertClass ? 'animate__fadeIn' : 'animate__fadeOut'
+            ">
+                <ngb-alert [dismissible]="false" [type]="myTool.myAlertType">
+                  {{ myTool.myAlertMessage }}
+                </ngb-alert>
+              </div>
+              <div class="row" *ngIf="coupon">
+                <div class="col-md-4 col-sm-8">
+                  <div class="form-group">
+                    <label class="form-label">{{
+                      "checkOut.applyCoupons" | translate
+                      }}</label>
+                    <input type="text" class="form-control" name="Apply Coupons" [(ngModel)]="couponCode"
+                      [placeholder]="'checkOut.enterYourCouponCode' | translate" />
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 align-self-center">
+                  <button class="btn btn-primary mt-2" (click)="applyCoupon()">
+                    {{ "checkOut.apply" | translate }}
+                  </button>
+                </div>
+              </div>
+              <div class="row mb-2" *ngIf="!coupon">
+                <div class="col-md-4 col-sm-8 align-self-center">
+                  <span><b>{{ "checkOut.coupon" | translate }} </b>:
+                    {{ couponData?.name }} ({{ couponData?.percentOff }}%)</span>
+                </div>
+                <div class="col-md-4 col-sm-4 align-self-center">
+                  <button class="btn btn-danger mt-2" (click)="removeCoupon()">
+                    {{ "checkOut.remove" | translate }}
+                  </button>
+                </div>
+              </div>
+              <hr class="border-light m-0" />
+              <div>
+                <h4 class="mb-2 mt-2">
+                  {{ "checkOut.totalPrice" | translate }}
+                </h4>
+                <p class="m-0">SAR {{ totalPrice() }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container d-flex justify-content-center my-4">
+        <button type="button" (click)="back()" class="btn btn-outline-secondary mr-3">
+          {{ "checkOut.close" | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="openModal(paymentMethodSelection)">
+          {{ "checkOut.letsPay" | translate }}
+        </button>
+      </div>
+    </div>
+    <div class="col-md-8 col-xl-8" *ngIf="!guestUser()">
+      <!-- Description -->
+      <div class="card mb-2">
+        <h6 class="card-header">
+          <div class="row">
+            <div class="col-1">
+              <a (click)="back()" class="back mr-3">
+                <i class="fas fa-chevron-left"></i></a>
+            </div>
+            <div class="col-11">
+              <span style="font-size: 17px">
+                {{ eventData?.eventDetail?.title }}
+              </span>
+              <br />
+              <span class="font-weight-normal mt-2">
+                <i class="far fa-clock text-success"></i>
+                {{eventData?.eventDetail?.dateTime | myDateTime}}</span>
+              <br />
+              <span class="font-weight-normal mt-2">
+                <i class="fa fa-street-view text-primary"></i>
+                {{ eventData?.eventDetail?.subtitle }} <br />
+                <i class="fa fa-map-marker-alt text-danger"></i>
+                {{ eventData?.eventDetail?.location }}</span>
+            </div>
+          </div>
+        </h6>
+        <div class="card-body">
+          <div *ngIf="myTool.myAlertShow" id="my-alert-div" class="animate__animated mx-4 mt-2" [ngClass]="
+              myTool.myAlertClass ? 'animate__fadeIn' : 'animate__fadeOut'
+            ">
+            <ngb-alert [dismissible]="false" [type]="myTool.myAlertType">
+              {{ myTool.myAlertMessage }}
+            </ngb-alert>
+          </div>
+          <h5 class="text-center font-weight-bold mb-3">
+            {{ "checkOut.howCanWeContactYou" | translate }}
+          </h5>
+          <h6 class="text-center mb-3">
+            {{
+            "checkOut.weWillOnlyContactYouRegardingYourTickets" | translate
+            }}
+          </h6>
+        </div>
+      </div>
+      <div class="container d-flex justify-content-center my-4">
+        <button type="button" (click)="back()" class="btn btn-outline-secondary mr-3">
+          {{ "checkOut.close" | translate }}
+        </button>
+        <button *ngIf="guestUser()" type="button" class="btn btn-success mx-2"
+          (click)="openModal(paymentMethodSelection)">
+          {{ "checkOut.letsPay" | translate }}
+        </button>
+        <button *ngIf="!guestUser()" type="button" class="btn btn-primary mx-2" (click)="loginBtn()">
+          {{ "checkOut.loginOrRegister" | translate }}
+        </button>
+      </div>
+    </div>
+    <div class="col-md-4 col-xl-4">
+      <!-- Project details -->
+      <div class="card mb-4 pb-2">
+        <h6 class="card-header">
+          {{ "checkOut.ticketInformation" | translate }}
+        </h6>
+        <div class="card-body">
+          <ul>
+            <li>
+              {{
+              "checkOut.secureTransactionsBackedByFullServiceCustomerCare"
+              | translate
+              }}
+            </li>
+            <li>
+              {{
+              "checkOut.100RefundForEventsThatAreCancelledAndNotRescheduled"
+              | translate
+              }}
+            </li>
+            <li>{{ "checkOut.contactTheCustomerService" | translate }}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card mb-4 pb-2">
+        <h6 class="card-header">{{ "checkOut.aboutUs" | translate }}</h6>
+        <div class="card-body">
+          <ul>
+            <li>
+              {{ "checkOut.customersRelyOnUsForTheirTickets" | translate }}
+            </li>
+            <li>{{ "checkOut.ourCustomerServiceIsReady" | translate }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #paymentMethodSelection let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      {{ "checkOut.SelectPaymentMethod" | translate }}
+    </h5>
+    <button type="button" class="close" (click)="d('Cross click')">
+      &times;
+    </button>
+  </div>
+  <div class="modal-body">
+    <label class="custom-control custom-radio" *ngFor="let item of paymentOptions" style="min-height: 50px">
+      <input name="custom-radio" [value]="item?.PaymentMethodId" [(ngModel)]="selectedPaymentMethodId" type="radio"
+        class="custom-control-input" />
+      <span class="custom-control-label">
+        &nbsp; &nbsp;
+        <img style="height: 35px" [src]="item?.ImageUrl" alt="" />
+        &nbsp;&nbsp;
+        <b>
+          {{
+          getCurrentLang() == "en"
+          ? item?.PaymentMethodEn
+          : item?.PaymentMethodAr
+          }}</b>
+      </span>
+    </label>
+
+
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="c('Close click')">
+      Close
+    </button>
+    <button type="button" class="btn btn-success" [disabled]="!selectedPaymentMethodId"
+      (click)="c('Close click'); createOrder(null)">
+      Continue
+    </button>
+    <!-- <ng-container *ngIf="!checkOutBtnReturner()">
+      <button class="btn btn-secondary" [disabled]="!selectedPaymentMethodId"
+        (click)="c('Close click'); createOrder('sdk')">
+        SDK
+      </button>
+      <button class="btn btn-success" [disabled]="!selectedPaymentMethodId"
+        (click)="c('Close click'); createOrder(null)">
+        Direct
+      </button>
+    </ng-container> -->
+  </div>
+</ng-template>
+
+<ng-container *ngIf="login">
+  <app-auth></app-auth>
+</ng-container>
+<button style="display: none" (click)="deleteDialog.show()" id="success" class="btn btn-primary"></button>
+
+<swal #deleteDialog [options]="dialogOptions" (confirm)="okBtn()"></swal>
+
+
+
+<!-- <button class="btn btn-primary" (click)="onTest()">Test</button>
+<button class="btn btn-primary" (click)="loadApplePayFiles()">Load</button>
+<input id="mySessionId" class="form-control" type="text" [value]="this.sessionData.SessionId">
+<input id="myCountryCode" class="form-control" type="text" [value]="this.sessionData.CountryCode"> -->

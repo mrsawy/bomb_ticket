@@ -1,0 +1,20 @@
+<section class="px-4">
+<div class=" partnerContainer container-fluid pt-5 pb-5 ">
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-4">
+      <h2 [class]="isArLng()? 'text-right':''" style="margin-bottom: 10px">{{'partnerShip.moreThanAPartnership' | translate}}  </h2>
+      <p [class]="isArLng()? 'text-right':''">
+        {{'partnerShip.theseAreMoreThanPartnershipsThisIsARelationBuiltOnPassionBelieveAndGreatResults' | translate}} {{'partnerShip.manyInternationalConsultantsAndCounsellorsShareOurPassionToRedefineTheSecondaryTicketsMarket' | translate}}
+      </p>
+    </div>
+    <div class="col-12 col-sm-12 col-md-8">
+      <div class="row  ">
+        <div class="partnerShip col-lg-3 col-xl-2 col-md-6 col-6 align-self-center" *ngFor="let item of partnerShip">
+          <img [src]="item?.image? url + item?.image : 'img/no img.jpg'" style="border-radius: 13px;" class="img-fluids"  alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<hr class="border-light m-0" />

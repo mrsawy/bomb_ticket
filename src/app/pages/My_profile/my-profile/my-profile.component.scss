@@ -1,0 +1,35 @@
+.list-group-item {
+    outline: 0;
+    cursor: pointer;
+  }
+  
+  // Turn on styles encapsulation
+  $ngx-chips-encapsulated: true;
+  @import '~vendor/libs/ngx-chips/ngx-chips.scss';
+  .head{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .profile-modal-div {
+ 
+  
+    @media (max-height: 400px) {
+      .mypro-graphic-div {
+        display: none !important;
+      }
+    }
+  
+    @media (min-width: 576px) {
+      .mypro-graphic-div {
+        display: block;
+        .graphic-div {
+          .graphic-img {
+            height: 250px;
+          }
+        }
+      }
+    }
+  }

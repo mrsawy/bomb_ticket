@@ -1,0 +1,358 @@
+<app-navbar></app-navbar>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-md-6 col-xl-7">
+      <!-- Description -->
+      <div class="card mb-2">
+        <h6 class="card-header">{{ eventData?.title }}</h6>
+        <div class="card-body">
+          <img style="filter: brightness(55%); height: 40vh; width: 100%" [src]="url + eventData?.eventImg"
+            class="img-fluid" alt="Responsive image" />
+          <div class="content">
+            <h5>{{ eventData?.dateTime | date: "medium" }}</h5>
+            <h5>
+              <span> {{ eventData?.subtitle }}</span>
+            </h5>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-4 d-block w-100">
+        <div class="card-header">
+          <h6 class="d-inline-block mb-0">{{"Ticket_Detail.Location" | translate }}</h6>
+          <ng-container *ngIf="eventData?.location">
+            &nbsp;
+            <small>({{eventData?.location}})</small>
+          </ng-container>
+        </div>
+        <div class="card-body text-center">
+          <a *ngIf="eventData?.locationImg" [href]="url + eventData?.locationImg" target="_blank">
+
+            <img [src]="url + eventData?.locationImg" class="img-fluid">
+            <!-- <agm-map [latitude]="lat" [longitude]="lng" [zoom]="15" [styles]="customStyle">
+              [fitBounds]="true" 
+              [agmFitBounds]="true" 
+            <agm-marker [latitude]="lat" [longitude]="lng">
+              <agm-info-window>
+                <strong>{{ eventData?.title }}</strong>
+              </agm-info-window>
+            </agm-marker>
+          </agm-map> -->
+          </a>
+          <div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-xl-5">
+
+      <div class="card">
+
+        <div class="card-header font-weight-bold">{{"Ticket_Detail.Ticket" | translate }}</div>
+
+        <div class="card-body" *ngIf="eventTicketArray.length == 0">
+          <h4 class="text-center text-danger my-3">
+            {{"Ticket_Detail.NoTicketIn" | translate }} {{ eventData?.title }}
+          </h4>
+        </div>
+
+        <ng-container *ngIf="eventTicketArray.length != 0">
+
+          <!-- Table controls -->
+          <div class="card-body">
+
+            <div class="row">
+              <div class="col">
+                {{ "Ticket_Detail.Perpage" | translate }}: &nbsp;
+                <select [(ngModel)]="perPage" (change)="update()"
+                  class="custom-select custom-select-sm d-inline-block w-auto">
+                  <option *ngFor="let limit of [10, 20, 30, 40, 50]">{{limit}}</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+          <!-- / Table controls -->
+
+          <!-- Table -->
+          <hr class="border-light m-0">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered card-table">
+              <thead>
+                <tr>
+                  <th class="text-nowrap text-center">
+                    #
+                  </th>
+                  <th class="text-nowrap text-center">
+                    {{ "Ticket_Detail.TicketTier" | translate }}
+                  </th>
+                  <th class="text-nowrap text-center">
+                    {{ "Ticket_Detail.Available" | translate }}
+                  </th>
+                  <th class="text-nowrap text-center">{{ "Ticket_Detail.Sold" | translate }}</th>
+                  <th class="text-nowrap text-center">
+                    {{ "Ticket_Detail.PriceperTicket" | translate }}
+                    <!-- <br>
+                    (<small>{{ "Ticket_Detail.IncludingTax" | translate }}</small>) -->
+                  </th>
+                  <th class="text-nowrap text-center">
+                    {{ "Ticket_Detail.besideEachOther" | translate }}
+                  </th>
+                  <th class="text-nowrap text-center">{{ "Ticket_Detail.Actions" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="ticket.length > 0">
+                <tr *ngFor="let item of ticket; index as i">
+                  <td class="align-middle text-center">{{i + 1}}</td>
+                  <td class="align-middle text-center">
+                    {{ item?.ticket_section?.name }}
+                  </td>
+                  <td class="align-middle text-center">
+                    {{item?.ticketAvailable}}
+                  </td>
+                  <td class="align-middle text-center">
+                    {{item?.ticketSold}}
+                  </td>
+                  <td class="align-middle text-center">
+                    {{ priceReturn(item?.price)?.finalPrice }}
+
+                    <b>{{ "Ticket_Detail.SAR" | translate }}</b>
+                  </td>
+                  <td class="align-middle text-center">
+                    {{ (item?.isBesideEachOther ? 'Ticket_Detail.Yes' : 'Ticket_Detail.No') | translate }}
+                  </td>
+                  <td class="align-middle text-center">
+                    <button *ngIf="item?.tickets?.length>item?.ticketSold" class="btn btn-dark"
+                      (click)="(buyBtnReturn(item?.sellerId) ? purchaseDialog.show() : openModal(selectModal, item, i)); ticketSellerId = item?.sellerId">
+                      {{ "Ticket_Detail.Buy" | translate }}
+                    </button>
+                    <button disabled *ngIf="item?.tickets?.length==item?.ticketSold" class="btn btn-sm btn-danger">
+                      {{ "Ticket_Detail.SoldOut" | translate }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- / Table -->
+
+          <!-- Pagination -->
+          <div class="card-body py-0">
+
+            <div class="row">
+              <div class="col-sm text-sm-left text-center pt-3">
+                <span class="text-muted" *ngIf="totalItems">{{ "Ticket_Detail.Page" | translate }} {{ currentPage }}
+                  {{ "Ticket_Detail.of" | translate }} {{ totalPages }}</span>
+              </div>
+              <div class="col-sm pt-3">
+                <ngb-pagination [collectionSize]="totalItems" [pageSize]="perPage" [maxSize]="1" [(page)]="currentPage"
+                  (pageChange)="update()" size="sm" class="d-flex justify-content-center justify-content-sm-end m-0">
+                </ngb-pagination>
+              </div>
+            </div>
+
+          </div>
+
+        </ng-container>
+        <!-- / Pagination -->
+      </div>
+
+
+
+      <!-- Project details -->
+      <!-- <div class="card mb-4 pb-2">
+        <h6 class="card-header">{{ "Ticket_Detail.Ticket" | translate }}</h6>
+        <div class="row" *ngIf="ticket.length != 0">
+          <div class="col m-3">
+            {{ "Ticket_Detail.Perpage" | translate }}: &nbsp;
+            <select [(ngModel)]="perPage" (change)="update()"
+              class="custom-select custom-select-sm d-inline-block w-auto">
+              <option *ngFor="let limit of [10, 20, 30, 40, 50]">
+                {{ limit }}
+              </option>
+            </select>
+          </div>
+          <div class="col"></div>
+        </div>
+        <div class="row">
+          <div class="col-2 align-self-center" *ngIf="eventTicketArray.length != 0">
+            <div class="pt-2 text-center font-weight-bold" (click)="ordSetSort('TicketTier')">
+              {{ "Ticket_Detail.TicketTier" | translate }}<i class="ion text-muted ml-1" *ngIf="ordSortBy=='TicketTier'"
+                [ngClass]="'ion-md-arrow-' + (ordSortDesc ? 'down' : 'up')"></i>
+            </div>
+          </div>
+          <div class="col-3 align-self-center" *ngIf="eventTicketArray.length != 0">
+            <div class="pt-2 text-center font-weight-bold" (click)="ordSetSort('ticketAvailable')">
+              {{ "Ticket_Detail.Available" | translate }} / {{ "Ticket_Detail.Sold" | translate }}<i
+                class="ion text-muted ml-1" *ngIf="ordSortBy=='ticketAvailable'"
+                [ngClass]="'ion-md-arrow-' + (ordSortDesc ? 'down' : 'up')"></i>
+            </div>
+          </div>
+          <div class="col-2 align-self-center" *ngIf="eventTicketArray.length != 0">
+            <div class="pt-2 text-center font-weight-bold">
+              {{ "Ticket_Detail.Sold" | translate }}
+            </div>
+          </div>
+          <div class="col-2 align-self-center" *ngIf="eventTicketArray.length != 0">
+            <div class="pt-2 text-center font-weight-bold" (click)="ordSetSort('price')">
+              {{ "Ticket_Detail.PriceperTicket" | translate }}<i class="ion text-muted ml-1" *ngIf="ordSortBy=='price'"
+                [ngClass]="'ion-md-arrow-' + (ordSortDesc ? 'down' : 'up')"></i>
+            </div>
+          </div>
+          <div class="col-2 align-self-center" *ngIf="eventTicketArray.length != 0">
+            <div class="pt-2 text-center font-weight-bold" (click)="ordSetSort('isBesideEachOther')">
+              {{ "Ticket_Detail.besideEachOther" | translate }}<i class="ion text-muted ml-1"
+                *ngIf="ordSortBy=='isBesideEachOther'" [ngClass]="'ion-md-arrow-' + (ordSortDesc ? 'down' : 'up')"></i>
+            </div>
+          </div>
+
+          <div class="col-3 align-self-center" *ngIf="eventTicketArray.length != 0">
+            <div class="pt-2 text-center font-weight-bold">
+              {{ "Ticket_Detail.Status" | translate }}
+            </div>
+          </div>
+
+          <ng-container *ngFor="let item of ticket; index as i">
+            <div class="col-2 align-self-center">
+              <div class="mt-2 mb-2 pl-4">{{ item?.ticket_section?.name }}</div>
+            </div>
+            <div [class]="
+              item?.tickets.length == 0
+                    ? 'text-danger text-center mt-2 mb-2'
+                    : ' mt-2 mb-2 text-center'
+                    ">
+                {{
+                  item?.tickets.length == 0 ? ('Ticket_Detail.SoldOut' | translate) : item?.tickets.length
+                }}
+              </div>
+            <div class="col-3 align-self-center text-center">
+              {{item?.tickets?.length - getSoldQty(item)}}
+              /
+              </div>
+            <div class="col-2 align-self-center text-center">
+              {{getSoldQty(item)}}
+            </div>
+            <div class="col-2 align-self-center">
+              <div class="mt-2 mb-2 text-center">
+                <b>SAR</b> {{ item?.price }}
+              </div>
+            </div>
+            <div class="col-2 align-self-center">
+              <div class="mt-2 mb-2 text-center">
+                {{ item?.isBesideEachOther ? 'Yes' : 'No' }}
+              </div>
+            </div>
+            <div class="col-3 align-self-center text-center">
+              <button *ngIf="item?.tickets?.length>getSoldQty(item)" class="btn btn-dark"
+                (click)="openModal(selectModal, item, i)">{{
+                "Ticket_Detail.Buy" |
+                translate }}
+              </button>
+              <button disabled *ngIf="item?.tickets?.length==getSoldQty(item)" class="btn btn-sm btn-danger">
+                {{ "Ticket_Detail.SoldOut" | translate }}
+              </button>
+              <a href="javascript:void(0) ">
+                <span *ngIf="item?.tickets.length != 0" class="buyBtn button1"
+                  (click)="openModal(selectModal, item, i)">{{ "Ticket_Detail.Buy" | translate }}
+                </span>
+                <span *ngIf="item?.tickets.length == 0" class="text-danger">
+                  {{ "Ticket_Detail.SoldOut" | translate }}</span>
+              </a>
+            </div>
+            <hr class="text-light" style="margin: auto; width: 89%" />
+          </ng-container>
+        </div>
+        <h4 *ngIf="eventTicketArray.length == 0" class="text-center text-danger my-3">
+          No Ticket In {{ eventData?.title }}
+        </h4>
+        <div class="card-body py-0" *ngIf="ticket.length != 0">
+          <div class="row">
+            <div class="col-sm text-sm-left text-center pt-3">
+              <span class="text-muted" *ngIf="totalItems">{{ "Ticket_Detail.Page" | translate }} {{ currentPage }}
+                {{ "Ticket_Detail.of" | translate }} {{ totalPages }}</span>
+            </div>
+            <div class="col-sm pt-3">
+              <ngb-pagination [collectionSize]="totalItems" [pageSize]="perPage" [(page)]="currentPage"
+                (pageChange)="update()" size="sm" class="d-flex justify-content-center justify-content-sm-end m-0">
+              </ngb-pagination>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>
+<ng-template #selectModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="editLabel">
+      {{ "Ticket_Detail.howManyTicketsDoYouWantToBuy" | translate }}
+    </h5>
+    <button type="button" class="close" (click)="modal.dismiss()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body p-0">
+    <form>
+      <fieldset class="row m-4">
+        <!-- <div class="col-4" *ngFor="let item of getAvailableTickets(); index as i">
+          <div class="form-check d-inline-block mt-2 mr-5">
+            <input class="d-inline-block form-check-input" type="radio" value="en"
+              [checked]="item?.isChecked ? true : false" (change)="selectQuantity($event.target.value, i)" />
+            <label class="form-check-label ml-2" for="gridRadios1">
+              {{ i + 1 }}
+            </label>
+          </div>
+        </div> -->
+        <div class="number-picker">
+          <ng-number-picker min="1" [max]="getAvailableTickets()?.length" (valueChange)="selectQuantity($event)">
+          </ng-number-picker>
+        </div>
+      </fieldset>
+      <div class="card">
+        <h6 class="card-header">{{ "Ticket_Detail.Summary" | translate }}</h6>
+        <div class="card-body">
+          <h6>
+            {{ "Ticket_Detail.TicketTier" | translate }}
+            <span class="font-weight-normal">: {{ quantityData?.ticket_section?.name }}
+            </span>
+          </h6>
+          <h6>
+            {{ "Ticket_Detail.Ticket" | translate }}
+            <span class="font-weight-normal">: {{ quantityData?.ticketLength }}
+              <small>x</small> SAR
+              {{ quantityData?.finalPrice }}
+            </span>
+          </h6>
+          <!-- <hr class="border-light m-0" /> -->
+          <!-- <div> -->
+          <h5 class="">
+            {{ "Ticket_Detail.TotalPrice" | translate }}: <span class="font-weight-normal"><b>SAR</b> {{
+              quantityData?.ticketPrice }}</span>
+          </h5>
+          <!-- <p class="m-0"></p> -->
+          <!-- </div> -->
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">
+          {{ "Ticket_Detail.Close" | translate }}
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="!quantityData?.ticketLength" (click)="addMyInfoBtn()">
+          {{ "Ticket_Detail.AddmyInfo" | translate }}
+        </button>
+
+
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
+
+<swal #purchaseDialog
+  [options]="{ title: ('Ticket_Detail.CannotPurchase' | translate), text: ('Ticket_Detail.YouCannotPurchaseYourOwnTicket' | translate), type: 'warning',showCloseButton: true, confirmButtonClass: 'btn btn-lg btn-warning', confirmButtonText: ('Ticket_Detail.Ok' | translate) }">
+</swal>

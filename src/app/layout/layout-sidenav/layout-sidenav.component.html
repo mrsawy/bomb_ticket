@@ -1,0 +1,533 @@
+<sidenav [orientation]="orientation" class="sidenav sidenav-vertical bg-light">
+  <!-- Inner -->
+  <div class="sidenav-inner" [ngClass]="{ '': orientation !== 'horizontal' }">
+    <img
+      class="sidenav-logo"
+      src="assets/img/bomb-ticket-logo-transparent.png"
+    />
+
+    <sidenav-router-link
+      icon="fas fa-home"
+      route="/home"
+      [active]="isActive('/home')"
+      >&nbsp; {{ "profile.Home" | translate }}</sidenav-router-link
+    >
+    <sidenav-router-link
+      *ngIf="guestUser()"
+      icon="ion ion-ios-person"
+      route="/my-profile/My profile"
+      [active]="isActive('/my-profile/My profile')"
+      >&nbsp; {{ "profile.MyProfile" | translate }}</sidenav-router-link
+    >
+    <!-- <sidenav-router-link *ngIf="guestUser()" icon="fas fa-chart-bar" route="/my-profile/Seller Dashboard"
+      [active]="isActive('/my-profile/Seller Dashboard')">&nbsp; {{ "profile.SellerDashboard" | translate }}
+    </sidenav-router-link> -->
+    <sidenav-router-link
+      *ngIf="guestUser()"
+      icon="fas fa-ticket-alt"
+      [active]="isActive('/sell-ticket')"
+      routerLink="/sell-ticket"
+    >
+      &nbsp;
+      {{ "Navbar.SellTicket" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      *ngIf="guestUser()"
+      icon="fas fa-file-invoice-dollar"
+      route="/my-profile/Seller Order"
+      [active]="isActive('/my-profile/Seller Order')"
+      >&nbsp; {{ "profile.SellerOrder" | translate }}
+    </sidenav-router-link>
+
+    <sidenav-router-link
+      *ngIf="guestUser()"
+      icon="fas fa-ticket-alt"
+      route="/my-profile/My Ticket"
+      [active]="isActive('/my-profile/My Ticket')"
+      >&nbsp; {{ "profile.MyTicket" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      *ngIf="guestUser()"
+      icon="fas fa-file-invoice-dollar"
+      route="/my-profile/Order"
+      [active]="isActive('/my-profile/Order')"
+      >&nbsp; {{ "profile.Order" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      *ngIf="guestUser()"
+      icon="fas fa-percent"
+      route="/my-profile/Coupons"
+      [active]="isActive('/my-profile/Coupons')"
+      >&nbsp; {{ "profile.MyCoupons" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      *ngIf="guestUser()"
+      icon="fas fa-wallet"
+      route="/my-profile/My Wallet"
+      [active]="isActive('/my-profile/My Wallet')"
+      >&nbsp; {{ "profile.MyWallet" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      *ngIf="guestUser()"
+      icon="fas fa-key"
+      route="/my-profile/Change password"
+      [active]="isActive('/my-profile/Change password')"
+      >&nbsp; {{ "profile.ChangePassword" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      disabled="true"
+      *ngIf="!guestUser()"
+      icon="ion ion-ios-person"
+      >&nbsp; {{ "profile.MyProfile" | translate }}</sidenav-router-link
+    >
+    <sidenav-router-link
+      disabled="true"
+      *ngIf="!guestUser()"
+      icon="fas fa-ticket-alt"
+    >
+      &nbsp; {{ "Navbar.SellTicket" | translate }}</sidenav-router-link
+    >
+    <!-- <sidenav-router-link disabled="true" *ngIf="!guestUser()" icon="fas fa-chart-bar">&nbsp; {{
+      "profile.SellerDashboard" | translate }}</sidenav-router-link> -->
+    <sidenav-router-link
+      disabled="true"
+      *ngIf="!guestUser()"
+      icon="fas fa-file-invoice-dollar"
+      >&nbsp; {{ "profile.SellerOrder" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      disabled="true"
+      *ngIf="!guestUser()"
+      icon="fas fa-ticket-alt"
+      >&nbsp; {{ "profile.MyTicket" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      disabled="true"
+      *ngIf="!guestUser()"
+      icon="fas fa-file-invoice-dollar"
+      >&nbsp; {{ "Navbar.MyOrders" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      disabled="true"
+      *ngIf="!guestUser()"
+      icon="fas fa-percent"
+      >&nbsp; {{ "Navbar.MyCoupons" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      disabled="true"
+      *ngIf="!guestUser()"
+      icon="fas fa-wallet"
+      >&nbsp; {{ "profile.MyWallet" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link disabled="true" *ngIf="!guestUser()" icon="fas fa-key"
+      >&nbsp; {{ "profile.ChangePassword" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      icon="fas fa-language"
+      (click)="openModal(editModal, null, null)"
+    >
+      &nbsp;{{ "Navbar.Changelanguage" | translate }}</sidenav-router-link
+    >
+    <sidenav-router-link
+      icon="ion ion-ios-log-out"
+      *ngIf="guestUser()"
+      (click)="exitBtn()"
+    >
+      &nbsp;{{ "Navbar.LogOut" | translate }}
+    </sidenav-router-link>
+    <sidenav-router-link
+      icon="ion ion-ios-log-out"
+      (click)="openModal(authModal, null, null)"
+      *ngIf="!guestUser()"
+    >
+      &nbsp;{{ "Navbar.logIn" | translate }}
+    </sidenav-router-link>
+  </div>
+</sidenav>
+<ng-template #authModal>
+  <div class="modal-header">
+    <h5 class="modal-title text-center" id="editLabel">
+      <a (click)="back()" *ngIf="forgotPassword">
+        <i class="back fas fa-chevron-left"></i
+      ></a>
+      &nbsp;
+      <span *ngIf="!forgotPassword">
+        {{
+          login
+            ? ("auth.loginToYourAccount" | translate)
+            : ("auth.registerAccount" | translate)
+        }}</span
+      >
+      <span *ngIf="forgotPassword"> {{ header() }}</span>
+    </h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modalService.dismissAll()"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body p-0">
+    <form>
+      <div
+        *ngIf="myTool.myAlertShow"
+        id="my-alert-div"
+        [class]="
+          isArLng()
+            ? 'animate__animated mx-4 mt-2 text-right'
+            : 'animate__animated mx-4 mt-2'
+        "
+        [ngClass]="myTool.myAlertClass ? 'animate__fadeIn' : 'animate__fadeOut'"
+      >
+        <ngb-alert [dismissible]="false" [type]="myTool.myAlertType">
+          {{ myTool.myAlertMessage }}
+        </ngb-alert>
+      </div>
+      <ng-container *ngIf="login && !forgotPassword">
+        <div
+          [class]="
+            isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+          "
+        >
+          <label class="form-label p-0">{{
+            "auth.phoneNumber" | translate
+          }}</label>
+          <input
+            [placeholder]="'auth.enterYourPhoneNumber' | translate"
+            type="number"
+            [(ngModel)]="credentials.phoneNumber"
+            name="phoneNumber"
+            [class]="isArLng() ? 'form-control text-right' : 'form-control'"
+          />
+        </div>
+        <div
+          [class]="
+            isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+          "
+        >
+          <label
+            [class]="
+              isArLng()
+                ? 'form-label p-0 d-flex justify-content-between align-items-start'
+                : 'form-label p-0 d-flex justify-content-between align-items-end'
+            "
+          >
+            {{ "auth.password" | translate }}
+            <a
+              href="javascript:void(0)"
+              (click)="forgotPasswordclick()"
+              class="d-block small"
+              >{{ "auth.forgotPassword" | translate }}</a
+            >
+          </label>
+          <input
+            [placeholder]="'auth.enterYourPassword' | translate"
+            type="password"
+            [(ngModel)]="credentials.password"
+            name="password"
+            [class]="isArLng() ? 'form-control text-right' : 'form-control'"
+          />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!login && !forgotPassword">
+        <div
+          [class]="
+            isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+          "
+        >
+          <label class="form-label p-0">{{
+            "auth.firstName" | translate
+          }}</label>
+          <input
+            [placeholder]="'auth.enterYourFirstName' | translate"
+            type="text"
+            [(ngModel)]="registerData.firstName"
+            name="firstName"
+            [class]="isArLng() ? 'form-control text-right' : 'form-control'"
+          />
+        </div>
+        <div
+          [class]="
+            isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+          "
+        >
+          <label class="form-label p-0">{{
+            "auth.lastName" | translate
+          }}</label>
+          <input
+            [placeholder]="'auth.enterYourLastName' | translate"
+            type="text"
+            [(ngModel)]="registerData.lastName"
+            name="lastName"
+            [class]="isArLng() ? 'form-control text-right' : 'form-control'"
+          />
+        </div>
+        <div
+          [class]="
+            isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+          "
+        >
+          <label class="form-label p-0">{{
+            "auth.phoneNumber" | translate
+          }}</label>
+          <input
+            [placeholder]="'auth.enterYourPhoneNumber' | translate"
+            [(ngModel)]="registerData.phoneNumber"
+            type="tel"
+            name="phoneNumber"
+            [class]="isArLng() ? 'form-control text-right' : 'form-control'"
+          />
+        </div>
+        <div
+          [class]="
+            isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+          "
+        >
+          <label class="form-label p-0">{{ "auth.email" | translate }}</label>
+          <input
+            [placeholder]="'auth.enterYourEmail' | translate"
+            [(ngModel)]="registerData.email"
+            type="email"
+            name="email"
+            [class]="isArLng() ? 'form-control text-right' : 'form-control'"
+          />
+        </div>
+
+        <div
+          [class]="
+            isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+          "
+        >
+          <label
+            class="form-label p-0 d-flex justify-content-between align-items-end"
+          >
+            {{ "auth.password" | translate }}
+          </label>
+          <input
+            placeholder="******"
+            type="password"
+            [(ngModel)]="registerData.password"
+            name="password"
+            [class]="isArLng() ? 'form-control text-right' : 'form-control'"
+          />
+        </div>
+        <div
+          [class]="
+            isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+          "
+        >
+          <label class="form-label p-0">{{ "auth.gander" | translate }}</label>
+          <select
+            [(ngModel)]="registerData.gender"
+            name="gender"
+            class="form-control"
+          >
+            <option value="male" checked>{{ "auth.male" | translate }}</option>
+            <option value="female">{{ "auth.female" | translate }}</option>
+          </select>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="forgotPassword">
+        <div *ngIf="type == 'email'">
+          <div
+            [class]="
+              isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+            "
+          >
+            <label class="form-label p-0">{{ "auth.email" | translate }}</label>
+            <input
+              [placeholder]="'auth.enterYourEmail' | translate"
+              type="email"
+              [(ngModel)]="forgotData.email"
+              name="email"
+              [class]="isArLng() ? 'form-control text-right' : 'form-control'"
+            />
+          </div>
+        </div>
+        <div *ngIf="type == 'verify'">
+          <div
+            [class]="
+              isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+            "
+          >
+            <label class="form-label p-0"
+              >{{ "auth.verification" | translate }}
+              <br />
+              <small>{{
+                "auth.verificationCodeSendToYourEmail" | translate
+              }}</small>
+              <br />
+              <small>{{ "auth.alsoCheckedYourSpamSection" | translate }}</small>
+            </label>
+            <input
+              [placeholder]="'auth.enterYourVerificationCode' | translate"
+              type="tel"
+              [(ngModel)]="forgotData.code"
+              name="code"
+              [class]="isArLng() ? 'form-control text-right' : 'form-control'"
+            />
+          </div>
+        </div>
+        <div *ngIf="type == 'password'">
+          <div
+            [class]="
+              isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+            "
+          >
+            <label class="form-label p-0">{{
+              "auth.password" | translate
+            }}</label>
+            <input
+              [placeholder]="'auth.enterYourPassword' | translate"
+              type="password"
+              [(ngModel)]="forgotData.password"
+              name="email"
+              [class]="isArLng() ? 'form-control text-right' : 'form-control'"
+            />
+          </div>
+          <div
+            [class]="
+              isArLng() ? 'form-group row m-4 text-right' : 'form-group row m-4'
+            "
+          >
+            <label class="form-label p-0">{{
+              "auth.confirmPassword" | translate
+            }}</label>
+            <input
+              [placeholder]="'auth.repeatYourPassword' | translate"
+              type="password"
+              [(ngModel)]="forgotData.confirmPassword"
+              name="email"
+              [class]="isArLng() ? 'form-control text-right' : 'form-control'"
+            />
+          </div>
+        </div>
+        <div class="d-grid gap-2 col-12 mx-auto p-0 mt-4">
+          <button
+            (click)="forgotPasswordBtn(type)"
+            style="width: 85%; margin: auto; display: block; margin-top: 13px"
+            type="button"
+            class="btn mb-3 btn-primary"
+          >
+            <div *ngIf="loading" class="btn-loading col">
+              <div class="sk-three-bounce sk-primary">
+                <div class="sk-child sk-bounce1"></div>
+                <div class="sk-child sk-bounce2"></div>
+                <div class="sk-child sk-bounce3"></div>
+              </div>
+            </div>
+            <div *ngIf="!loading">
+              {{ forgotBtnText() }}
+            </div>
+          </button>
+        </div>
+      </ng-container>
+      <div class="d-grid gap-2 col-12 mx-auto p-0 mt-4" *ngIf="!forgotPassword">
+        <button
+          (click)="login ? loginBtn() : registerBtn()"
+          type="button"
+          style="width: 85%; margin: auto; display: block; margin-top: 13px"
+          class="btn mb-3 btn-primary"
+        >
+          <div *ngIf="loading" class="btn-loading col">
+            <div class="sk-three-bounce sk-primary">
+              <div class="sk-child sk-bounce1"></div>
+              <div class="sk-child sk-bounce2"></div>
+              <div class="sk-child sk-bounce3"></div>
+            </div>
+          </div>
+          <div *ngIf="!loading">
+            {{
+              login ? ("auth.signIn" | translate) : ("auth.signUp" | translate)
+            }}
+          </div>
+        </button>
+      </div>
+    </form>
+    <div class="card-footer py-3 px-4 px-sm-5" *ngIf="!forgotPassword">
+      <div class="text-center text-muted">
+        {{
+          login
+            ? ("auth.AlreadyHaveAnAccount" | translate)
+            : ("auth.donTHaveAnAccountYet" | translate)
+        }}
+        <a href="javascript:void(0)"
+          ><span (click)="signUp()">{{
+            login ? ("auth.signUp" | translate) : ("auth.signIn" | translate)
+          }}</span></a
+        >
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #editModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="editLabel">
+      {{ "Navbar.Changelanguage" | translate }}
+    </h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modal.dismiss()"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body p-0">
+    <form>
+      <fieldset class="row m-4">
+        <div class="col-sm-12">
+          <div class="form-check mt-2">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="gridRadios"
+              id="gridRadios1"
+              value="en"
+              [checked]="getLanguage() == 'en' ? true : false"
+              (change)="onItemChange($event.target.value)"
+            />
+            <label class="form-check-label ml-3" for="gridRadios1">
+              {{ "Navbar.English" | translate }}
+            </label>
+          </div>
+          <div class="form-check mt-2">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="gridRadios"
+              id="gridRadios2"
+              value="ar"
+              [checked]="getLanguage() == 'ar' ? true : false"
+              (change)="onItemChange($event.target.value)"
+            />
+            <label class="form-check-label ml-3" for="gridRadios2">
+              {{ "Navbar.Arabic" | translate }}
+            </label>
+          </div>
+        </div>
+      </fieldset>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="modalService.dismissAll()"
+        >
+          {{ "Navbar.Close" | translate }}
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          (click)="changesLanguage()"
+        >
+          {{ "Navbar.Change" | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

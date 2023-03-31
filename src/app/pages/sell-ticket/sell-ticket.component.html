@@ -1,0 +1,494 @@
+<!-- <app-navbar></app-navbar> -->
+
+<div class="inner-banner">
+  <div class="container" *ngIf="guestUser()">
+    <h2>{{ "sellTicket.selectYourEvent" | translate }}</h2>
+    <ng-select class="select_event" [items]="allEvent" [multiple]="false" [closeOnSelect]="true" rtl="false"
+      bindValue="id" [placeholder]="'sellTicket.selectForAnEventOrATeam' | translate" [searchable]="true"
+      bindLabel="title" [(ngModel)]="eventId" name="event" (change)="selectEvent($event)">
+    </ng-select>
+  </div>
+</div>
+<div class="container">
+  <div class="card p-3 my-5" *ngIf="loading">
+    <h5 class="text-center mb-0">{{ "order.loading" | translate }}</h5>
+    <div class="sk-wave sk-primary">
+      <div class="sk-rect sk-rect1"></div>
+      <div class="sk-rect sk-rect2"></div>
+      <div class="sk-rect sk-rect3"></div>
+      <div class="sk-rect sk-rect4"></div>
+      <div class="sk-rect sk-rect5"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Table controls -->
+<div *ngIf="!loading">
+  <h3 *ngIf="completedTicket" class="text-center my-5 py-5">
+    <i class="fas fa-check-circle mb-4 text-success animate__animated animate__flip"
+      style="font-size: 100px; animation: flip; animation-duration: 1s"></i>
+    <br />
+    {{ "sellTicket.Your" | translate }}
+    <span class="text-primary"> {{ "sellTicket.Tickets" | translate }}</span>
+    {{ "sellTicket.areSentToTheAdminFor" | translate }}
+    <span class="text-success"> {{ "sellTicket.revision" | translate }}</span>
+  </h3>
+</div>
+<div *ngIf="!loading">
+  <h2 *ngIf="cardDetails" class="text-center my-5 py-5 text-capitalize">
+    <i class="fas fa-ticket-alt mb-2 text-primary" style="font-size: 100px"></i>
+    <br />
+    {{ "sellTicket.sellYour" | translate }}
+    <span class="text-primary">{{ "sellTicket.Tickets" | translate }}</span>
+    <br />
+    <span *ngIf="!guestUser()" style="font-size: 15px; color: #7e7e7e">
+      {{ "sellTicket.logInFirstAndContinue" | translate }}
+    </span>
+    <br />
+    <button *ngIf="!guestUser()" type="button" class="btn btn-primary mx-auto mt-2" (click)="loginBtn()">
+      {{ "sellTicket.loginOrRegister" | translate }}
+    </button>
+  </h2>
+</div>
+
+<div class="container mt-4 mb-4" *ngIf="ticketCardDetails && !loading">
+  <div class="card mb-2">
+    <div class="card-body">
+      <div *ngIf="myTool.myAlertShow" id="my-alert-div" [class]="
+          isArLng()
+            ? 'animate__animated mx-4 mt-2 text-right'
+            : 'animate__animated mx-4 mt-2'
+        " [ngClass]="myTool.myAlertClass ? 'animate__fadeIn' : 'animate__fadeOut'">
+        <ngb-alert [dismissible]="false" [type]="myTool.myAlertType">
+          {{ myTool.myAlertMessage }}
+        </ngb-alert>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-4 col-sm-4">
+          <img [src]="url + eventData.eventImg" class="img-fluid sell_ticket_img" alt="Responsive image" />
+        </div>
+        <div class="col-12 col-md-8 col-sm-8">
+          <div class="card">
+            <div class="card-header font-weight-bold">
+              {{ eventData.title }}
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-8 col-sm-12">
+                  <h5>
+                    <i class="fas fa-clock"></i>
+                    <span class="font-weight-normal">
+                      &nbsp; {{ eventData.dateTime | date: "shortTime" }}</span>
+                  </h5>
+                  <h5>
+                    <i class="fa fa-street-view"></i>
+                    <span class="font-weight-normal">&nbsp; {{ eventData.subtitle }}</span>
+                  </h5>
+                  <h5>
+                    <i class="fa fa-map-marker"></i>
+                    <span class="font-weight-normal">&nbsp; {{ eventData.location }}</span>
+                  </h5>
+                </div>
+                <div class="col-md-4 col-sm-12 text-center align-self-center"
+                  style="border-left: 1px solid rgba(235, 235, 235)">
+                  <h3>{{ eventData.dateTime | date: "EEEE" }}</h3>
+                  <p>{{ eventData.dateTime | date: "longDate" }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label [class]="
+                isArLng() ? 'form-label text-right d-block' : 'form-label'
+              ">{{ "sellTicket.ticketSection" | translate }}</label>
+            <ng-select class="select_event" [items]="ticketSectionEvent" [multiple]="false" [closeOnSelect]="true"
+              bindValue="id" [placeholder]="'sellTicket.selectTicketSection' | translate" [searchable]="true"
+              bindLabel="name" [(ngModel)]="ticketSectionId" name="ticketSectionEvent">
+            </ng-select>
+          </div>
+        </div>
+        <!-- <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label [class]="
+                isArLng() ? 'form-label text-right d-block' : 'form-label'
+              ">{{ "sellTicket.howManyTicketDoYouHave" | translate }}</label>
+            <ng-select class="select_event" [items]="ticketQuantity" [multiple]="false" [closeOnSelect]="true"
+              bindValue="id" [placeholder]="'sellTicket.quantity' | translate" [searchable]="true" bindLabel="id"
+              name="event" [(ngModel)]="ticketsQuantityLength">
+            </ng-select>
+          </div>
+        </div> -->
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label [class]="
+                isArLng() ? 'form-label text-right d-block' : 'form-label'
+              ">{{ "sellTicket.ticketPrice" | translate }}
+              <span *ngIf="priceReturn(price)?.finalPrice">
+                ({{ "sellTicket.includingTax" | translate }}
+                {{ ticketTaxPercentage }}%: {{ priceReturn(price)?.finalPrice }})
+              </span>
+            </label>
+            <input type="number" class="form-control" name="price" [(ngModel)]="price"
+              [placeholder]="'sellTicket.enterPrice' | translate"
+              oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+              maxlength="4" />
+          </div>
+        </div>
+        <!-- <div
+          class="col-md-4 col-sm-12"
+          *ngFor="let item of quantity; index as i"
+        >
+          <div class="form-group">
+            <label
+              [class]="
+                isArLng() ? 'form-label text-right d-block' : 'form-label'
+              "
+              >{{ i + 1 }}.
+              {{ "sellTicket.pleaseUploadTicketPictures" | translate }}</label
+            >
+            <input
+              (change)="fileChanged($event, item)"
+              type="file"
+              [id]="item.id"
+              class="form-control"
+              name="item.name"
+              accept="application/pdf"
+              [ngClass]="
+                fileTypeReturn(item.id) != null
+                  ? fileTypeReturn(item.id)
+                    ? 'is-valid'
+                    : 'is-invalid'
+                  : ''
+              "
+            />
+            <small *ngIf="!fileTypeReturn(item.id)" class="invalid-feedback">
+              {{ "sellTicket.choosePdfFile" | translate }}
+            </small>
+          </div>
+        </div> -->
+        <div class="col-md-12">
+          <div class="form-group">
+            <label [class]="isArLng() ? 'form-label text-right d-block' : 'form-label'">{{
+              "sellTicket.pleaseUploadTicketPictures" | translate }} ({{this.ticketsQuantityLength}})
+            </label>
+            <input (change)="fileChangedUpload($event)" multiple type="file" class="form-control" name="item.name"
+              accept="application/pdf" />
+          </div>
+        </div>
+
+        <div class="text-muted text-justify mb-2">
+          {{'sellTicket.YouCanSortYourTicketsByDraggingThemUpAndDown' | translate}}
+        </div>
+
+
+        <div class="my-2">
+
+          <div [sortablejs]="uploadTicketsFilesArray" [sortablejsOptions]="sortablejsOptions"
+            class="project-task-list custom-controls-stacked">
+            <div *ngFor="let item of uploadTicketsFilesArray; index as i" class="col-12">
+
+              <div class="card p-2">
+                <div class="row">
+                  <div class="col-8 d-flex align-items-center justify-content-start">{{item?.oldName}}</div>
+                  <div class="col-4 d-flex align-items-center justify-content-end">
+                    <button class="project-task-handle btn btn-sm btn-outline-primary m-1">
+                      <i class="ion ion-ios-move"></i>
+                    </button>
+                    &nbsp;
+                    <button class="btn btn-sm btn-outline-danger" (click)="uploadTicketsFilesArray.splice(i, 1)">
+                      <i class="fas fa-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+        <div class="row mt-4">
+          <div class="col-6">
+            <label class="form-check form-check-inline">
+              <span class="form-check-label">{{
+                "sellTicket.besideEachOther" | translate
+                }}</span>
+              &nbsp; &nbsp;
+              <input type="radio" id="contactChoice1" name="contact" value="true" checked="true"
+                (change)="onBesidesChange($event)" />
+              <label style="margin-bottom: 0 !important" for="contactChoice1">
+                &nbsp;{{ "sellTicket.Yes" | translate }}</label>
+              &nbsp; &nbsp;
+              <input type="radio" id="contactChoice2" name="contact" value="false" (change)="onBesidesChange($event)" />
+              <label style="margin-bottom: 0 !important" for="contactChoice2">
+                &nbsp;{{ "sellTicket.No" | translate }}</label>
+            </label>
+          </div>
+          <div class="col-6 text-right">
+            <button (click)="disclaimerDialog.show()" [disabled]="continueBtnReturn()" [ladda]="loadingBtn"
+              data-style="slide-up" type="button" class="btn btn-primary">
+              {{ "sellTicket.continue" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <br />
+    </div>
+  </div>
+</div>
+
+
+
+<swal #disclaimerDialog
+  [options]="{ title: ('sellTicket.Disclaimer' | translate), html: ('sellTicket.DisclaimerText' | translate), type: 'warning', allowOutsideClick: false,  allowEscapeKey: false, showCloseButton: false, confirmButtonClass: 'btn btn-lg btn-warning', confirmButtonText: ('sellTicket.IAccept' | translate) }"
+  (confirm)="afterAllUploads()">
+</swal>
+
+<!-- <app-footer></app-footer> -->
+<ng-container *ngIf="loginDiv">
+  <app-auth></app-auth>
+</ng-container>
+<!-- <ng-template #editModal>
+  <div class="modal-header">
+    <h5 class="modal-title text-center" id="editLabel">
+      <a (click)="back()" *ngIf="forgotPassword">
+        <i class="back fas fa-chevron-left"></i
+      ></a>
+      &nbsp;
+      <span *ngIf="!forgotPassword">
+        {{ login ? ('auth.loginToYourAccount' | translate) : ('auth.registerAccount' | translate) }}</span
+      >
+      <span *ngIf="forgotPassword"> {{ header() }}</span>
+    </h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modalDismiss()"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body p-0">
+    <form>
+      <div
+        *ngIf="myTool.myAlertShow"
+        id="my-alert-div"
+        class="animate__animated mx-4 mt-2"
+        [ngClass]="myTool.myAlertClass ? 'animate__fadeIn' : 'animate__fadeOut'"
+      >
+        <ngb-alert [dismissible]="false" [type]="myTool.myAlertType">
+          {{ myTool.myAlertMessage }}
+        </ngb-alert>
+      </div>
+      <ng-container *ngIf="login && !forgotPassword">
+        <div class="form-group row m-4">
+          <label class="form-label">{{'auth.email' | translate}}:</label>
+          <input
+            [placeholder]="'auth.enterYourEmail' | translate"
+            type="email"
+            [(ngModel)]="credentials.email"
+            name="email"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group row m-4">
+          <label
+            class="form-label d-flex justify-content-between align-items-end"
+          >
+          {{'auth.password' | translate}} :
+            <a
+              href="javascript:void(0)"
+              (click)="forgotPasswordclick()"
+              class="d-block small"
+              >{{'auth.forgotPassword' | translate}}</a
+            >
+          </label>
+          <input
+            [placeholder]="'auth.enterYourPassword' | translate"
+            type="password"
+            [(ngModel)]="credentials.password"
+            name="password"
+            class="form-control"
+          />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!login && !forgotPassword">
+        <div class="form-group row m-4">
+          <label class="form-label">{{'auth.firstName' | translate}} :</label>
+          <input
+            [placeholder]="'auth.enterYourFirstName' | translate"
+            type="text"
+            [(ngModel)]="registerData.firstName"
+            name="firstName"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group row m-4">
+          <label class="form-label">{{'auth.lastName' | translate}}:</label>
+          <input
+            [placeholder]="'auth.enterYourLastName' | translate"
+            type="text"
+            [(ngModel)]="registerData.lastName"
+            name="lastName"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group row m-4">
+          <label class="form-label">{{'auth.phoneNumber' | translate}}:</label>
+          <input
+            [placeholder]="'auth.enterYourPhoneNumber' | translate"
+            [(ngModel)]="registerData.phoneNumber"
+            type="tel"
+            name="phoneNumber"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group row m-4">
+          <label class="form-label">{{'auth.email' | translate}}:</label>
+          <input
+            [placeholder]="'auth.enterYourEmail' | translate"
+            [(ngModel)]="registerData.email"
+            type="email"
+            name="email"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group row m-4">
+          <label
+            class="form-label d-flex justify-content-between align-items-end"
+          >
+          {{'auth.password' | translate}}
+          </label>
+          <input
+            placeholder="******"
+            type="password"
+            [(ngModel)]="registerData.password"
+            name="password"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group row m-4">
+          <label class="form-label">{{'auth.gander' | translate}}:</label>
+          <select
+            [(ngModel)]="registerData.gender"
+            name="gender"
+            class="form-control"
+          >
+            <option value="male" checked>{{'auth.male' | translate}}</option>
+            <option value="female">{{'auth.female' | translate}}</option>
+          </select>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="forgotPassword">
+        <div *ngIf="type == 'email'">
+          <div class="form-group row m-4">
+            <label class="form-label">{{'auth.email' | translate}}:</label>
+            <input
+              [placeholder]="'auth.enterYourEmail' | translate"
+              type="email"
+              [(ngModel)]="forgotData.email"
+              name="email"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div *ngIf="type == 'verify'">
+          <div class="form-group row m-4">
+            <label class="form-label"
+              >{{'auth.verification' | translate}}:
+              <br />
+              <small>{{'auth.verificationCodeSendToYourEmail' | translate}}</small>
+              <br />
+              <small>{{'auth.alsoCheckedYourSpamSection' | translate}}</small>
+            </label>
+            <input
+              [placeholder]="'auth.enterYourVerificationCode' | translate"
+              type="tel"
+              [(ngModel)]="forgotData.code"
+              name="code"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div *ngIf="type == 'password'">
+          <div class="form-group row m-4">
+            <label class="form-label">{{'auth.password' | translate}}:</label>
+            <input
+              [placeholder]="'auth.enterYourPassword' | translate"
+              type="password"
+              [(ngModel)]="forgotData.password"
+              name="email"
+              class="form-control"
+            />
+          </div>
+          <div class="form-group row m-4">
+            <label class="form-label">{{'auth.confirmPassword' | translate}}:</label>
+            <input
+              [placeholder]="'auth.repeatYourPassword' | translate"
+              type="password"
+              [(ngModel)]="forgotData.confirmPassword"
+              name="email"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="d-grid gap-2 col-12 mx-auto p-0 mt-4">
+          <button
+            (click)="forgotPasswordBtn(type)"
+            type="button"
+            class="btn mb-3 btn-primary"
+          >
+            <div *ngIf="loading" class="btn-loading col">
+              <div class="sk-three-bounce sk-primary">
+                <div class="sk-child sk-bounce1"></div>
+                <div class="sk-child sk-bounce2"></div>
+                <div class="sk-child sk-bounce3"></div>
+              </div>
+            </div>
+            <div *ngIf="!loading">
+              {{ forgotBtnText() }}
+            </div>
+          </button>
+        </div>
+      </ng-container>
+      <div class="d-grid gap-2 col-12 mx-auto p-0 mt-4" *ngIf="!forgotPassword">
+        <button
+          (click)="login ? loginBtn() : registerBtn()"
+          type="button"
+          class="btn mb-3 btn-primary"
+        >
+          <div *ngIf="loading" class="btn-loading col">
+            <div class="sk-three-bounce sk-primary">
+              <div class="sk-child sk-bounce1"></div>
+              <div class="sk-child sk-bounce2"></div>
+              <div class="sk-child sk-bounce3"></div>
+            </div>
+          </div>
+          <div *ngIf="!loading">
+            {{ login ? ('auth.signIn' | translate) : ('auth.signUp' | translate) }}
+          </div>
+        </button>
+      </div>
+    </form>
+    <div class="card-footer py-3 px-4 px-sm-5" *ngIf="!forgotPassword">
+      <div class="text-center text-muted">
+        {{'auth.donTHaveAnAccountYet' | translate}}
+        <a href="javascript:void(0)"
+          ><span (click)="signUp()">{{
+            login ? ('auth.signUp' | translate): ('auth.signIn' | translate)
+          }}</span></a
+        >
+      </div>
+    </div>
+  </div>
+</ng-template> -->

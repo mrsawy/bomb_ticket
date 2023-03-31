@@ -1,0 +1,201 @@
+<app-navbar></app-navbar>
+<ngb-alert [dismissible]="false" [type]="
+    invoiceResponse == undefined
+      ? 'dark-medium'
+      : invoiceResponse?.InvoiceStatus == 'Paid'
+      ? 'dark-success'
+      : invoiceResponse?.InvoiceStatus == 'Pending'
+      ? 'dark-warning'
+      : 'dark-danger'
+  " [class]="isArLng() ? 'text-right' : 'text-left'">
+  {{
+  invoiceResponse == undefined
+  ? ("PaymentResponse.PleaseWait" | translate)
+  : invoiceResponse?.InvoiceStatus == "Paid"
+  ? ("PaymentResponse.success" | translate)
+  : invoiceResponse?.InvoiceStatus == "Pending"
+  ? ("PaymentResponse.pending" | translate)
+  : ("PaymentResponse.error" | translate)
+  }}
+</ngb-alert>
+<div class="card" *ngIf="
+    invoiceResponse?.InvoiceStatus !== 'Paid' ||
+    invoiceResponse?.InvoiceStatus !== 'Pending'
+  ">
+  <div class="card-body p-5" id="print-section" *ngIf="invoiceResponse !== undefined">
+    <div class="row">
+      <div class="col-sm-6 pb-4">
+        <div class="media align-items-center mb-4">
+          <div class="ui-w-40">
+            <div class="w-100 position-relative" style="padding-bottom: 54%">
+              <img src="../../../assets/img/bomb-ticket-logo-transparent.png" alt="" style="height: 75px" />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-1" [class]="isArLng() ? 'text-right' : 'text-left'">
+          info@bombticket.com
+        </div>
+        <!-- <div class="mb-1">+966 59 323 4249</div> -->
+        <div class="mb-1" [class]="isArLng() ? 'text-right' : 'text-left'">
+          {{ isArLng() ? "1126 375 55 966+" : "+966 55 375 1126" }}
+        </div>
+      </div>
+
+      <div class="col-sm-6 pb-4">
+        <h6 class="text-big text-large font-weight-bold mb-3">
+          {{ "PaymentResponse.INVOICE" | translate }} #{{
+          invoiceResponse?.InvoiceId
+          }}
+        </h6>
+        <div class="mb-1">
+          {{ "PaymentResponse.Date" | translate }}:
+          <strong class="font-weight-semibold">{{
+            invoiceResponse?.CreatedDate | date: "mediumDate"
+            }}</strong>
+        </div>
+        <div>
+          {{ "PaymentResponse.DueDate" | translate }}:
+          <strong class="font-weight-semibold">{{
+            invoiceResponse?.ExpiryDate
+            }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <hr class="mb-4" />
+
+    <div class="row">
+      <div class="col-sm-6 mb-4">
+        <div class="font-weight-bold mb-2">
+          {{ "PaymentResponse.UserDetails" | translate }}
+        </div>
+        <div>{{ invoiceResponse?.CustomerName | titlecase }}</div>
+        <div>
+          {{ invoiceResponse?.CustomerMobile }}
+        </div>
+        <div>{{ invoiceResponse?.CustomerEmail }}</div>
+      </div>
+      <div class="col-sm-6 mb-4">
+        <div class="font-weight-bold mb-2">
+          {{ "PaymentResponse.PaymentDetails" | translate }}:
+        </div>
+        <table style="width: 100%">
+          <tbody>
+            <tr>
+              <td class="pr-3">{{ "PaymentResponse.Total" | translate }}:</td>
+              <td>
+                <strong>{{ invoiceResponse?.InvoiceValue }} SAR</strong>
+              </td>
+            </tr>
+            <tr>
+              <td class="pr-3">
+                {{ "PaymentResponse.InvoiceStatus" | translate }} :
+              </td>
+              <td>{{ invoiceResponse?.InvoiceStatus }}</td>
+            </tr>
+            <tr>
+              <td class="pr-3">
+                {{ "PaymentResponse.InvoiceReference" | translate }} :
+              </td>
+              <td>{{ invoiceResponse?.InvoiceReference }}</td>
+            </tr>
+            <tr>
+              <td class="pr-3">
+                {{ "PaymentResponse.PaymentGateway" | translate }}
+              </td>
+              <td>
+                {{ invoiceResponse?.InvoiceTransactions[0]?.PaymentGateway }}
+              </td>
+            </tr>
+            <tr>
+              <td class="pr-3">
+                {{ "PaymentResponse.PaymentId" | translate }} :
+              </td>
+              <td>{{ invoiceResponse?.InvoiceTransactions[0]?.PaymentId }}</td>
+            </tr>
+            <tr>
+              <td class="pr-3">
+                {{ "PaymentResponse.CardNumber" | translate }} :
+              </td>
+              <td>{{ invoiceResponse?.InvoiceTransactions[0]?.CardNumber }}</td>
+            </tr>
+            <tr>
+              <td class="pr-3">
+                {{ "PaymentResponse.CustomerServiceCharges" | translate }} :
+              </td>
+              <td>
+                {{
+                invoiceResponse?.InvoiceTransactions[0]?.CustomerServiceCharge
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="table-responsive mb-4">
+      <table class="table m-0">
+        <thead>
+          <tr>
+            <th class="py-3">{{ "PaymentResponse.Event" | translate }}</th>
+            <th class="py-3">{{ "PaymentResponse.Quantity" | translate }}</th>
+            <th class="py-3">{{ "PaymentResponse.UnitPrice" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of invoiceResponse?.InvoiceItems">
+            <td class="py-3">
+              <div class="font-weight-semibold">
+                <img class="eventImg" [src]="
+                    invoiceResponse.UserDefinedField
+                      ? url + invoiceResponse.UserDefinedField
+                      : 'assets/img/no img.jpg'
+                  " alt="" />
+                {{ item.ItemName }}
+              </div>
+            </td>
+            <td class="py-3">
+              <div>
+                {{ item.Quantity }}
+              </div>
+            </td>
+            <td class="py-3">
+              <div>
+                {{ item.UnitPrice }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="py-3">
+              <strong class="d-block text-big mt-2">{{
+                "PaymentResponse.InvoicePrice" | translate
+                }}</strong>
+            </td>
+            <td class="py-3"></td>
+            <td class="py-3">
+              <strong class="d-block text-big mt-2">
+                {{ invoiceResponse?.InvoiceValue }} SAR</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-muted">
+      {{ "PaymentResponse.bombTickerText" | translate }}
+    </div>
+    <div class="text-muted">
+      {{ "PaymentResponse.InvoiceText" | translate }}
+    </div>
+  </div>
+  <div class="card-footer text-right" *ngIf="invoiceResponse !== undefined">
+    <button class="btn btn-primary m-1" (click)="exportPDF()">
+      {{ "PaymentResponse.Download" | translate }}
+    </button>
+    <button class="btn btn-primary m-1" [useExistingCss]="true" printSectionId="print-section" ngxPrint>
+      {{ "PaymentResponse.Print" | translate }}
+    </button>
+  </div>
+</div>
