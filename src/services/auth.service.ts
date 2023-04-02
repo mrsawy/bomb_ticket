@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+  import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
 
@@ -22,5 +22,22 @@ export class AuthService {
   }
   update_user_password(id, data) {
     return this.http.post(this.url + 'user/update-password/' + id, data);
+  }
+
+  isUserExist(data){
+    return this.http.post(this.url + 'user/is-user-exist' ,data);
+
+  }
+
+  sendOtp(data){
+    console.log(`sending the otp now ...`);
+    
+    return this.http.post('http://localhost:3000/user/send-otp',data);
+
+  }
+
+  verifyOtp(data){
+    return this.http.post('http://localhost:3000/user/verify-otp' ,data);
+
   }
 }

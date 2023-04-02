@@ -12,6 +12,9 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { TranslateService } from "@ngx-translate/core";
 import { environment } from "../../../environments/environment";
 import { AuthService } from "../../../services/auth.service";
+
+// import { isUserExist } from "../../../services/auth.service";
+
 import { ChangeLanguageService } from "../../../services/change-language.service";
 import { NotificationService } from "../../../services/notification.service";
 import { UploaderService } from "../../../services/uploader.service";
@@ -22,13 +25,14 @@ import { LayoutService } from "../layout.service";
 @Component({
   selector: "app-layout-sidenav",
   templateUrl: "./layout-sidenav.component.html",
-  styles: [":host { display: block; }", 
-  "../../components/auth/auth.component.scss",
-  "../../../vendor/libs/spinkit/spinkit.scss",
-  "../../../vendor/styles/pages/authentication.scss",
-  "../../../vendor/libs/ngx-toastr/ngx-toastr.scss",
-  "../../../vendor/libs/ng-select/ng-select.scss",
-],
+  styles: [
+    ":host { display: block; }",
+    "../../components/auth/auth.component.scss",
+    "../../../vendor/libs/spinkit/spinkit.scss",
+    "../../../vendor/styles/pages/authentication.scss",
+    "../../../vendor/libs/ngx-toastr/ngx-toastr.scss",
+    "../../../vendor/libs/ng-select/ng-select.scss",
+  ],
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class LayoutSidenavComponent implements AfterViewInit {
@@ -87,7 +91,21 @@ export class LayoutSidenavComponent implements AfterViewInit {
   dataSuccess: any;
   dataError: any;
   dataAuth: any;
-  
+  isLanguageArabic: Boolean;
+
+  otpState: Boolean = false;
+  otp_id: String = "";
+
+  //////////
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  gender: string;
+  ////////
+  modal:Boolean=true
+
   constructor(
     private router: Router,
     private appService: AppService,
@@ -103,7 +121,8 @@ export class LayoutSidenavComponent implements AfterViewInit {
     public userData: UserDataService,
     public translateService: TranslateService
   ) {
-    
+    this.isLanguageArabic = this.userData.isLngAr();
+
     translateService.get("dataSuccess").subscribe((resp: any) => {
       this.dataSuccess = resp;
     });
@@ -113,19 +132,19 @@ export class LayoutSidenavComponent implements AfterViewInit {
     translateService.get("auth").subscribe((resp: any) => {
       this.dataAuth = resp;
     });
-      // Set host classes
-      this.hostClassVertical = this.orientation !== "horizontal";
-      this.hostClassHorizontal = !this.hostClassVertical;
-      this.hostClassFlex = this.hostClassHorizontal;
+    // Set host classes
+    this.hostClassVertical = this.orientation !== "horizontal";
+    this.hostClassHorizontal = !this.hostClassVertical;
+    this.hostClassFlex = this.hostClassHorizontal;
   }
-  
+
   getLanguage() {
     if (localStorage.getItem("ticketLang")) {
       let lang = localStorage.getItem("ticketLang");
       return lang;
     }
   }
-  
+
   ngAfterViewInit() {
     // Safari bugfix
     this.layoutService._redrawLayoutSidenav();
@@ -150,9 +169,7 @@ export class LayoutSidenavComponent implements AfterViewInit {
     }
 
     return `${
-      this.orientation === "horizontal"
-        ? "container "
-        : " bg-light text-dark"
+      this.orientation === "horizontal" ? "container " : " bg-light text-dark"
     } bg-${bg}`;
   }
   toggleSidenav() {
@@ -160,7 +177,6 @@ export class LayoutSidenavComponent implements AfterViewInit {
   }
   isActive(url) {
     return this.router.isActive(url, true);
-    
   }
 
   isMenuActive(url) {
@@ -173,7 +189,6 @@ export class LayoutSidenavComponent implements AfterViewInit {
     );
   }
 
-
   changesLanguage() {
     this.ChangeLanguageService.setLang(this.language);
     window.location.reload();
@@ -182,14 +197,11 @@ export class LayoutSidenavComponent implements AfterViewInit {
   onItemChange(value) {
     this.language = value;
   }
-  
+
   exitBtn() {
     localStorage.clear();
     this.Router.navigate([""]);
   }
-
-
-
 
   isArLng() {
     return this.userData.isLngAr();
@@ -201,7 +213,8 @@ export class LayoutSidenavComponent implements AfterViewInit {
     this.innerWidth = window.innerWidth;
   }
   ngOnInit() {
-    this.innerWidth = window.innerWidth;}
+    this.innerWidth = window.innerWidth;
+  }
 
   loginBtn() {
     this.loading = true;
@@ -210,6 +223,7 @@ export class LayoutSidenavComponent implements AfterViewInit {
         "danger",
         this.dataError.pleaseEnterYourEmailAndPassword
       );
+      this.loading = false;
     } else {
       this.authServices.login(this.credentials).subscribe(
         (resp: any) => {
@@ -237,6 +251,8 @@ export class LayoutSidenavComponent implements AfterViewInit {
             );
           else if (err.error.error == "Email does not exist!")
             this.myTool.showMyAlert("danger", this.dataError.emailDoesNotExist);
+
+          this.loading = false;
         }
       );
     }
@@ -252,42 +268,146 @@ export class LayoutSidenavComponent implements AfterViewInit {
     ) {
       this.myTool.showMyAlert("danger", this.dataError.pleaseFillTheAllFields);
       this.loading = false;
+    } else if (this.registerData.phoneNumber.length < 7) {
+      this.myTool.showMyAlert("danger", this.dataError.pleaseFillTheAllFields);
+      this.loading = false;
     } else {
-      this.authServices.register(this.registerData).subscribe(
-        (resp: any) => {
-          this.myTool.showMyAlert(
-            "success",
-            this.dataSuccess.accountSuccessfullyCreated
-          );
-          localStorage.setItem("user-ticket", JSON.stringify(resp.user));
-          localStorage.setItem("userId-ticket", JSON.stringify(resp.user.id));
-          this.loading = false;
-          this.modalService.dismissAll();
-          this.registerData = {
-            firstName: "",
-            gender:'',
-            lastName: "",
-            phoneNumber: "",
-            email: "",
-            password: "",
-          };
-        },
-        (err) => {
-          this.loading = false;
+      if (this.registerData.password.length > 6) {
+        //////////
 
-          if (err.error.error == "Email already Exits!")
-            this.myTool.showMyAlert("danger", this.dataError.emailOrPhoneNumberAlreadyExits);
-          else if (
-            err.error.error == "Password should be greater than 6 characters!"
-          )
-            this.myTool.showMyAlert(
-              "danger",
-              this.dataError.passwordShouldBeGreaterThan_6Characters
-            );
+        this.email = this.registerData.email;
+        this.password = this.registerData.password;
+        this.firstName = this.registerData.firstName;
+        this.lastName = this.registerData.lastName;
+        this.phoneNumber = this.registerData.phoneNumber;
+        if (this.registerData.gender) {
+          this.gender = this.registerData.gender;
         }
-      );
+
+        //////////////
+
+        this.authServices
+          .isUserExist({ email: this.registerData.email })
+          .subscribe(
+            (response) => {
+              if (response) {
+                this.loading = false;
+
+                this.myTool.showMyAlert(
+                  "danger",
+                  this.dataError.emailOrPhoneNumberAlreadyExits
+                );
+              } else {
+                this.loading = false;
+                //////////////////////////////////////////
+                //////////here the code for sending to the OTP state
+
+                this.otpState = true;
+
+                this.authServices
+                  .sendOtp({
+                    phoneNumber: this.registerData.phoneNumber,
+                  })
+                  .subscribe(
+                    (resp: any) => {
+                      console.log(resp);
+                      this.otp_id = resp.otp_id;
+                    },
+                    (err) => {
+                      this.myTool.showMyAlert(
+                        "danger",
+                        `some thing went wrong plaese try again`
+                      );
+                      console.log(err);
+                    }
+                  );
+
+                ////////////////////
+              }
+            },
+            (err) => {
+              console.log(`error in checking the user:`, err);
+            }
+          );
+      } else {
+        this.myTool.showMyAlert(
+          "danger",
+          this.dataError.passwordShouldBeGreaterThan_6Characters
+        );
+      }
     }
   }
+
+  verifyOtp(otp) {
+    this.authServices.verifyOtp({ otp: otp, otp_id: this.otp_id }).subscribe(
+      (resp) => {
+        console.log(resp);
+        this.otpState = false;
+        this.modal = false ;
+        this.modalService.dismissAll();
+
+        this.authServices
+          .register({
+            firstName: this.firstName,
+            lastName: this.lastName,
+            phoneNumber: this.phoneNumber,
+            gender: this.gender,
+            email: this.email,
+            password: this.password,
+          })
+          .subscribe(
+            (resp: any) => {
+              this.myTool.showMyAlert(
+                "success",
+                this.dataSuccess.accountSuccessfullyCreated
+              );
+              localStorage.setItem("user-ticket", JSON.stringify(resp.user));
+              localStorage.setItem(
+                "userId-ticket",
+                JSON.stringify(resp.user.id)
+              );
+              this.loading = false;
+              // this.modal = true
+              this.registerData = {
+                firstName: "",
+                gender: "",
+                lastName: "",
+                phoneNumber: "",
+                email: "",
+                password: "",
+              };
+            },
+            (err) => {
+              this.loading = false;
+
+              console.log(`couldnt sign in`, err);
+
+              if (err.error.error == "Email already Exits!")
+                this.myTool.showMyAlert(
+                  "danger",
+                  this.dataError.emailOrPhoneNumberAlreadyExits
+                );
+              else if (
+                err.error.error ==
+                "Password should be greater than 6 characters!"
+              )
+                this.myTool.showMyAlert(
+                  "danger",
+                  this.dataError.passwordShouldBeGreaterThan_6Characters
+                );
+            }
+          );
+      },
+      (err) => {
+        this.myTool.showMyAlert(
+          "danger",
+          `Enter the correct OTP sent to your SMS`
+        );
+        console.log(err);
+      }
+    );
+  }
+
   signUp() {
     this.login = !this.login;
   }
@@ -326,7 +446,7 @@ export class LayoutSidenavComponent implements AfterViewInit {
   forgotPasswordclick() {
     this.forgotPassword = true;
   }
-  modaldismis
+  modaldismis;
 
   forgotPasswordBtn() {
     if (this.type == "email") {
@@ -341,7 +461,10 @@ export class LayoutSidenavComponent implements AfterViewInit {
         (err) => {
           this.loading = false;
           if (err.error.error == "Email does not exist")
-            this.myTool.showMyAlert("danger", this.dataError.emailDoesNotExistForForgot);
+            this.myTool.showMyAlert(
+              "danger",
+              this.dataError.emailDoesNotExistForForgot
+            );
           else if (
             err.error.error == "Error occurred while sending Verification Code"
           )

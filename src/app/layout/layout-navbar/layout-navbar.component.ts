@@ -101,8 +101,11 @@ export class LayoutNavbarComponent {
     termsAndCondition: "",
     title: "",
     updatedAt: "",
+
   };
   dataSuccess: any;
+  isLanguageArabic:Boolean;
+  // otpLabel
   dataError: any;
   dataAuth: any;
   constructor(
@@ -121,6 +124,7 @@ export class LayoutNavbarComponent {
     public translateService: TranslateService,
     public layoutService: LayoutService
   ) {
+    this.isLanguageArabic = this.userDataService.isLngAr() ;
     translateService.get("dataSuccess").subscribe((resp: any) => {
       this.dataSuccess = resp;
     });

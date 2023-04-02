@@ -40,7 +40,7 @@ export class NotificationService {
   myAlertType: any;
   myAlertMessage: any;
 
-  showMyAlert(type, message) {
+  showMyAlert(type, message:string) {
     this.myAlertType = 'dark-' + type;
     this.myAlertMessage = message;
     this.myAlertShow = true;
